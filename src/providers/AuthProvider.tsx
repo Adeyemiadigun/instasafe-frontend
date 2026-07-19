@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 function mapBackendAuth(raw: Record<string, unknown>): AuthResult {
   return {
     token: String(raw.Token || raw.token || ""),
-    refreshToken: String(raw.RefreshToken || raw.refreshToken || ""),
+    refreshToken: raw.RefreshToken || raw.refreshToken ? String(raw.RefreshToken || raw.refreshToken) : undefined,
     userId: String(raw.UserId || raw.userId || ""),
     email: String(raw.Email || raw.email || ""),
     firstName: String(raw.FirstName || raw.firstName || ""),
@@ -40,9 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .then((res) => {
           setUser(mapBackendAuth(res.data));
           const mapped = mapBackendAuth(res.data);
-          storeAuth(mapped.token, mapped.refreshToken, mapped);
+          storeAuth(mapped.token, mapped.refreshToken ?? "", mapped);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Auth check failed:", err);
           clearAuth();
           setUser(null);
         })
@@ -56,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const res = await api.post("/auth/login", { email, password });
     const mapped = mapBackendAuth(res.data);
     setUser(mapped);
-    storeAuth(mapped.token, mapped.refreshToken, mapped);
+    storeAuth(mapped.token, mapped.refreshToken ?? "", mapped);
   }, []);
 
   const register = useCallback(async (payload: { firstName: string; lastName: string; email: string; password: string; phone?: string }) => {

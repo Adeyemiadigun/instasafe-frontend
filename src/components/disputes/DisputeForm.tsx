@@ -23,20 +23,25 @@ export default function DisputeForm({ orderId, onSuccess }: DisputeFormProps) {
       toast.error("Please provide a reason for the dispute.")
       return
     }
-    const res = await raiseDispute.mutateAsync({
-      orderId,
-      buyerId: user?.userId || "",
-      reason: reason.trim(),
-      evidenceUrls: evidenceUrls.trim() || undefined,
-    })
-    const data = res.data
-    if (data.succeeded) {
-      toast.success("Dispute raised successfully.")
-      setReason("")
-      setEvidenceUrls("")
-      onSuccess?.()
-    } else {
-      toast.error(data.errors?.[0] || "Failed to raise dispute.")
+    try {
+      const res = await raiseDispute.mutateAsync({
+        orderId,
+        buyerId: user?.userId || "",
+        reason: reason.trim(),
+        evidenceUrls: evidenceUrls.trim() || undefined,
+      })
+      const data = res.data
+      if (data.succeeded) {
+        toast.success("Dispute raised successfully.")
+        setReason("")
+        setEvidenceUrls("")
+        onSuccess?.()
+      } else {
+        toast.error(data.errors?.[0] || "Failed to raise dispute.")
+      }
+    } catch (err) {
+      toast.error("Failed to raise dispute. Please try again.")
+      console.error("Dispute submission error:", err)
     }
   }
 

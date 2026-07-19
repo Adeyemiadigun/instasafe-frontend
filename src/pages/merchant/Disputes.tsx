@@ -54,7 +54,9 @@ export default function MerchantDisputes() {
                 <TableRow
                   key={order.id}
                   className="cursor-pointer hover:bg-muted/50"
+                  tabIndex={0}
                   onClick={() => navigate(`/dashboard/orders/${order.id}`)}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/dashboard/orders/${order.id}`) } }}
                 >
                   <TableCell className="font-medium">{order.orderReference}</TableCell>
                   <TableCell>{order.itemName}</TableCell>

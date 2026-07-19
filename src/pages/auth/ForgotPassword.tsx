@@ -28,7 +28,8 @@ export default function ForgotPassword() {
     try {
       await api.post("/auth/forgot-password", { email: data.email })
       setSent(true)
-    } catch {
+    } catch (err) {
+      console.error("Forgot password request failed:", err);
       setSent(true)
     } finally {
       setLoading(false)

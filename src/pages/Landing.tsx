@@ -22,16 +22,18 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   useEffect(() => {
     if (!inView) return
     let start = 0
+    let rafId: number
     const duration = 2000
     const step = (ts: number) => {
       if (!start) start = ts
       const progress = Math.min((ts - start) / duration, 1)
       setCount(Math.floor(progress * target))
-      if (progress < 1) requestAnimationFrame(step)
+      if (progress < 1) rafId = requestAnimationFrame(step)
     }
-    requestAnimationFrame(step)
+    rafId = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(rafId)
   }, [inView, target])
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>
+  return <span ref={ref} aria-live="off">{count.toLocaleString()}{suffix}</span>
 }
 
 const steps = [
@@ -53,7 +55,7 @@ const features = [
 function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
   const { ref, inView } = useInView(0.2)
   return (
-    <div ref={ref} className={`relative text-center transition-all duration-600 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: `${index * 150}ms` }}>
+    <div ref={ref} className={`relative text-center transition-all duration-500 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: `${index * 150}ms` }}>
       <div className="relative z-10 w-12 h-12 bg-emerald-600 text-white rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-200">
         <step.icon className="h-6 w-6" />
       </div>
@@ -87,7 +89,7 @@ export default function Landing() {
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-lg">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold text-emerald-600">InstaSafe</span>
+          <span className="text-xl font-bold text-emerald-700">InstaSafe</span>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
             <a href="#features" className="hover:text-foreground transition-colors">Features</a>
@@ -96,7 +98,7 @@ export default function Landing() {
             <Link to="/auth/login"><Button variant="ghost" size="sm">Login</Button></Link>
             <Link to="/auth/register"><Button size="sm">Get Started</Button></Link>
           </div>
-          <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
+          <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu" aria-expanded={mobileOpen}>
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
@@ -128,7 +130,7 @@ export default function Landing() {
             <h1 className={`text-4xl md:text-6xl font-bold tracking-tight mb-6 transition-all duration-700 delay-100 ${heroAnim.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
               Sell with Confidence.
               <br />
-              <span className="text-emerald-600">Buy without Fear.</span>
+              <span className="text-emerald-700">Buy without Fear.</span>
             </h1>
             <p className={`text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 transition-all duration-700 delay-200 ${heroAnim.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
               InstaSafe holds your payment in escrow until delivery is confirmed.
@@ -148,7 +150,7 @@ export default function Landing() {
           <div className={`flex flex-wrap justify-center gap-8 mt-16 transition-all duration-700 delay-500 ${heroAnim.inView ? "opacity-100" : "opacity-0"}`}>
             {["Escrow Protected", "QR Verified Delivery", "24h Dispute Resolution", "Instant Settlement"].map((item) => (
               <div key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <CheckCircle className="h-4 w-4 text-emerald-600" />
+                <CheckCircle className="h-4 w-4 text-emerald-700" />
                 {item}
               </div>
             ))}
@@ -168,7 +170,7 @@ export default function Landing() {
             ].map((stat, i) => (
               <div key={stat.label} className={`transition-all duration-500 ${statsAnim.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: `${i * 100}ms` }}>
                 <div className="text-3xl md:text-4xl font-bold">
-                  {stat.prefix}{stat.prefix ? "" : ""}<AnimatedCounter target={stat.target} suffix={stat.suffix} />
+                   {stat.prefix}<AnimatedCounter target={stat.target} suffix={stat.suffix} />
                 </div>
                 <div className="text-emerald-100 text-sm mt-1">{stat.label}</div>
               </div>
@@ -208,6 +210,34 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="container mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Trusted by Merchants Across Nigeria</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">See what our merchants and buyers are saying about InstaSafe.</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {[
+            { quote: "InstaSafe changed how I sell on Instagram. My buyers trust me now because they know their money is safe until they get their order.", name: "Chioma A.", role: "Fashion Merchant, Lagos" },
+            { quote: "I was scammed twice before finding InstaSafe. Now I never pay for anything without escrow protection. It's a game changer.", name: "Emeka O.", role: "Buyer, Abuja" },
+            { quote: "The QR verification means I never worry about delivery disputes. Everything is timestamped and verified. My dispute rate dropped to zero.", name: "Fatima B.", role: "Electronics Merchant, Kano" },
+          ].map((t) => (
+            <div key={t.name} className="bg-background border rounded-xl p-6 flex flex-col">
+              <div className="flex gap-1 mb-3 text-emerald-500">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="h-4 w-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground flex-1 mb-4">&ldquo;{t.quote}&rdquo;</p>
+              <div>
+                <p className="text-sm font-semibold">{t.name}</p>
+                <p className="text-xs text-muted-foreground">{t.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="container mx-auto px-6 py-24">
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-12 md:p-16 text-center text-white">
@@ -215,7 +245,7 @@ export default function Landing() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
           <div className="relative">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Sell Securely?</h2>
-            <p className="text-emerald-100 text-lg mb-8 max-w-xl mx-auto">Join hundreds of Nigerian merchants who trust InstaSafe for every transaction.</p>
+            <p className="text-emerald-100 text-lg mb-8 max-w-xl mx-auto">Join 500+ Nigerian merchants who trust InstaSafe for every transaction.</p>
             <Link to="/auth/register">
               <Button size="lg" className="text-lg px-8 bg-white text-emerald-600 hover:bg-emerald-50 shadow-xl">
                 Create Free Account <ChevronRight className="h-5 w-5 ml-1" />
@@ -230,7 +260,7 @@ export default function Landing() {
         <div className="container mx-auto px-6 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <span className="text-xl font-bold text-emerald-600">InstaSafe</span>
+               <span className="text-xl font-bold text-emerald-700">InstaSafe</span>
               <p className="text-sm text-muted-foreground mt-2">Secure escrow payments for Nigerian e-commerce. Every transaction, verified.</p>
             </div>
             <div>
@@ -244,17 +274,17 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold text-sm mb-3">Company</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
+                <li><span className="text-muted-foreground/60">About</span></li>
+                <li><span className="text-muted-foreground/60">Blog</span></li>
+                <li><a href="mailto:support@instasafe.com" className="hover:text-foreground transition-colors">Contact</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold text-sm mb-3">Legal</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Escrow Terms</a></li>
+                <li><span className="text-muted-foreground/60">Privacy Policy</span></li>
+                <li><span className="text-muted-foreground/60">Terms of Service</span></li>
+                <li><span className="text-muted-foreground/60">Escrow Terms</span></li>
               </ul>
             </div>
           </div>

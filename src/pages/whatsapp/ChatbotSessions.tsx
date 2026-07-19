@@ -4,7 +4,6 @@ import StatCard from "@/components/shared/StatCard"
 import LoadingSpinner from "@/components/shared/LoadingSpinner"
 import EmptyState from "@/components/shared/EmptyState"
 import { MessageSquare, Clock, Bot, Users } from "lucide-react"
-import type { ChatbotState } from "@/types"
 
 export default function ChatbotSessions() {
   const { data: sessions, isLoading } = useChatbotSessions()

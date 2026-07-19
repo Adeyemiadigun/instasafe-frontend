@@ -39,6 +39,7 @@ export default function DisputesList() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">All Disputes</h1>
         <select
+          id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -69,7 +70,9 @@ export default function DisputesList() {
                 <TableRow
                   key={d.id}
                   className="cursor-pointer hover:bg-muted/50"
+                  tabIndex={0}
                   onClick={() => navigate(`/admin/disputes/${d.id}`)}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
                 >
                   <TableCell className="font-medium">{d.orderReference}</TableCell>
                   <TableCell>{d.buyerName}</TableCell>

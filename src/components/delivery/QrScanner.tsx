@@ -46,7 +46,7 @@ export default function QrScanner({ onScan, onError }: QrScannerProps) {
   return (
     <div className="space-y-3">
       {isStarting && <LoadingSpinner message="Starting camera..." />}
-      <div id="qr-reader" ref={containerRef} className="w-full rounded-lg overflow-hidden" />
+      <div id="qr-reader" ref={containerRef} className="w-full rounded-lg overflow-hidden" aria-label="QR code camera viewfinder" />
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <AlertCircle className="h-4 w-4" />
         <p>Point your camera at the QR code shown by the merchant.</p>

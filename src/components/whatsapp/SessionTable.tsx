@@ -35,7 +35,9 @@ export default function SessionTable({ sessions }: SessionTableProps) {
             <TableRow
               key={session.id}
               className="cursor-pointer hover:bg-muted/50"
+              tabIndex={0}
               onClick={() => navigate(`/whatsapp/sessions/${session.id}`)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/whatsapp/sessions/${session.id}`) } }}
             >
               <TableCell className="font-medium font-mono">{session.phoneNumber}</TableCell>
               <TableCell>

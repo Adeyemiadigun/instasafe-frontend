@@ -67,7 +67,9 @@ export default function AdminDashboard() {
                   <TableRow
                     key={d.id}
                     className="cursor-pointer hover:bg-muted/50"
+                    tabIndex={0}
                     onClick={() => navigate(`/admin/disputes/${d.id}`)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
                   >
                     <TableCell className="font-medium">{d.orderReference}</TableCell>
                     <TableCell>{d.buyerName}</TableCell>

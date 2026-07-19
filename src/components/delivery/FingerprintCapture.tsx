@@ -25,8 +25,7 @@ export default function FingerprintCapture({ onCapture }: FingerprintCaptureProp
   }
 
   useEffect(() => {
-    captureFingerprint()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    void captureFingerprint()
   }, [])
 
   return (
