@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useAuth } from "@/providers/AuthProvider"
+import { getApiErrorMessage } from "@/lib/errorHandler"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -40,8 +41,8 @@ export default function Register() {
       })
       setSuccess(msg || "Check your email to verify your account.")
       toast.success("Account created!")
-    } catch (err: any) {
-      toast.error(err.message || "Registration failed")
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }

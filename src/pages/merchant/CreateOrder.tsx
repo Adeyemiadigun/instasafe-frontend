@@ -4,10 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useAuth } from "@/providers/AuthProvider"
 import { useCreateOrder } from "@/hooks/useOrders"
+import { getApiErrorMessage } from "@/lib/errorHandler"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 
 const orderSchema = z.object({
@@ -30,19 +32,18 @@ export default function CreateOrder() {
 
   const onSubmit = async (data: OrderFormData) => {
     if (!user?.userId) return
-    const res = await createOrder.mutateAsync({
-      merchantId: user.userId,
-      itemName: data.itemName,
-      itemDescription: data.itemDescription || undefined,
-      price: data.price,
-      deliveryAddress: data.deliveryAddress || undefined,
-    })
-    const result = res.data
-    if (result.succeeded && result.data) {
+    try {
+      const res = await createOrder.mutateAsync({
+        merchantId: user.userId,
+        itemName: data.itemName,
+        itemDescription: data.itemDescription || undefined,
+        price: data.price,
+        deliveryAddress: data.deliveryAddress || undefined,
+      })
       toast.success("Order created!")
-      navigate(`/dashboard/orders/${result.data.orderId}`)
-    } else {
-      toast.error(result.errors?.[0] || "Failed to create order.")
+      navigate(`/dashboard/orders/${res.data.orderId}`)
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
     }
   }
 
@@ -62,7 +63,7 @@ export default function CreateOrder() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="itemDescription">Description</Label>
-              <textarea id="itemDescription" {...register("itemDescription")} className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+              <Textarea id="itemDescription" {...register("itemDescription")} />
               {errors.itemDescription && <p className="text-sm text-destructive">{errors.itemDescription.message}</p>}
             </div>
             <div className="space-y-2">

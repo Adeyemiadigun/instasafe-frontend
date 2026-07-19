@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import api from "@/lib/api"
+import { getApiErrorMessage } from "@/lib/errorHandler"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -30,16 +31,11 @@ export default function ResetPassword() {
   const onSubmit = async (data: ResetFormData) => {
     setLoading(true)
     try {
-      const res = await api.post("/auth/reset-password", { email, token, newPassword: data.password })
-      const result = res.data
-      if (result.succeeded) {
-        toast.success("Password reset successfully!")
-        navigate("/auth/login")
-      } else {
-        toast.error(result.errors?.[0] || "Reset failed.")
-      }
-    } catch {
-      toast.error("Reset failed. The link may have expired.")
+      await api.post("/auth/reset-password", { email, token, newPassword: data.password })
+      toast.success("Password reset successfully!")
+      navigate("/auth/login")
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }

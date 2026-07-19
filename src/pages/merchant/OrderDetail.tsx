@@ -12,8 +12,11 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Link as LinkIcon, QrCode, Clock } from "lucide-react"
-import { formatDate, formatDateShort } from "@/lib/utils"
+import { getApiErrorMessage } from "@/lib/errorHandler"
+import { formatDate } from "@/lib/utils"
+import { toast } from "sonner"
 import type { OrderStatus } from "@/types"
+import type { EscrowLinkResponse, QrCodesResponse } from "@/types"
 
 export default function OrderDetail() {
   const { id } = useParams<{ id: string }>()
@@ -23,20 +26,26 @@ export default function OrderDetail() {
   const generateQr = useGenerateQrCodes(id || "")
 
   const [buyerForm, setBuyerForm] = useState({ buyerFirstName: "", buyerLastName: "", buyerEmail: "", buyerPhone: "" })
-  const [escrowResult, setEscrowResult] = useState<any>(null)
-  const [qrResult, setQrResult] = useState<any>(null)
+  const [escrowResult, setEscrowResult] = useState<EscrowLinkResponse | null>(null)
+  const [qrResult, setQrResult] = useState<QrCodesResponse | null>(null)
 
   const handleGenerateLink = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await generateLink.mutateAsync(buyerForm)
-    const data = res.data
-    if (data.succeeded) setEscrowResult(data.data)
+    try {
+      const res = await generateLink.mutateAsync(buyerForm)
+      setEscrowResult(res.data)
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+    }
   }
 
   const handleGenerateQr = async () => {
-    const res = await generateQr.mutateAsync()
-    const data = res.data
-    if (data.succeeded) setQrResult(data.data)
+    try {
+      const res = await generateQr.mutateAsync()
+      setQrResult(res.data)
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+    }
   }
 
   if (isLoading) return <LoadingSpinner message="Loading order..." />

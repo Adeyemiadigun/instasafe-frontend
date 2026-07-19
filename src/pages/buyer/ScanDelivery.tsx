@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import QrScanner from "@/components/delivery/QrScanner"
 import FingerprintCapture from "@/components/delivery/FingerprintCapture"
 import DeliveryStatus from "@/components/delivery/DeliveryStatus"
+import { getApiErrorMessage } from "@/lib/errorHandler"
 import { toast } from "sonner"
 import { Camera } from "lucide-react"
 
@@ -37,17 +38,12 @@ export default function ScanDelivery() {
         deviceFingerprint: fp,
       })
       const data = res.data
-      if (data.succeeded && data.data) {
-        setResult({ status: "success", message: data.data.message || "Delivery confirmed successfully!" })
-        toast.success("Delivery confirmed!")
-      } else {
-        const msg = data.errors?.[0] || "Delivery confirmation failed."
-        setResult({ status: "error", message: msg })
-        toast.error(msg)
-      }
-    } catch {
-      setResult({ status: "error", message: "Failed to confirm delivery. Please try again." })
-      toast.error("Failed to confirm delivery.")
+      setResult({ status: "success", message: data.message || "Delivery confirmed successfully!" })
+      toast.success("Delivery confirmed!")
+    } catch (err) {
+      const errorMsg = getApiErrorMessage(err)
+      setResult({ status: "error", message: errorMsg })
+      toast.error(errorMsg)
     } finally {
       setStep("done")
     }

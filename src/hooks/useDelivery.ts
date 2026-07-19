@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import api from "@/lib/api"
-import type { ApiResult } from "@/types"
-import type { QrCodesResponse, PickupSessionResponse, DeliveryConfirmResponse, DeliverySessionStatus } from "@/types/delivery"
+import type { DeliverySessionStatus } from "@/types/delivery"
 
 export function useGenerateQrCodes(orderId: string) {
   return useMutation({
@@ -27,7 +26,7 @@ export function useDeliverySessionStatus(sessionId: string) {
   return useQuery({
     queryKey: ["deliverySession", sessionId],
     queryFn: () => api.get(`/delivery-sessions/sessions/${sessionId}`),
-    select: (res: { data: ApiResult<DeliverySessionStatus> }) => res.data.data,
+    select: (res: { data: DeliverySessionStatus }) => res.data,
     enabled: !!sessionId,
   })
 }

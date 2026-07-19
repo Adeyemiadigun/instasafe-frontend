@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import api from "@/lib/api"
+import { getApiErrorMessage } from "@/lib/errorHandler"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,13 +22,9 @@ export default function Payment() {
     try {
       const res = await api.post(`/buyers/orders/${orderId}/bank-debit/initiate`, form)
       const data = res.data
-      if (data.succeeded) {
-        setResult(data.data?.otpMessage || "Payment initiated. Check your phone for OTP.")
-      } else {
-        setResult(data.errors?.[0] || "Payment failed.")
-      }
-    } catch {
-      setResult("Payment initiation failed.")
+      setResult(data.otpMessage || "Payment initiated. Check your phone for OTP.")
+    } catch (err) {
+      setResult(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }
@@ -48,11 +45,11 @@ export default function Payment() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1"><Label>First Name *</Label><Input value={form.buyerFirstName} onChange={update("buyerFirstName")} required /></div>
-                <div className="space-y-1"><Label>Last Name *</Label><Input value={form.buyerLastName} onChange={update("buyerLastName")} required /></div>
+                <div className="space-y-1"><Label htmlFor="buyerFirstName">First Name *</Label><Input id="buyerFirstName" value={form.buyerFirstName} onChange={update("buyerFirstName")} required /></div>
+                <div className="space-y-1"><Label htmlFor="buyerLastName">Last Name *</Label><Input id="buyerLastName" value={form.buyerLastName} onChange={update("buyerLastName")} required /></div>
               </div>
-              <div className="space-y-1"><Label>Email *</Label><Input type="email" value={form.buyerEmail} onChange={update("buyerEmail")} required /></div>
-              <div className="space-y-1"><Label>Phone *</Label><Input value={form.buyerPhone} onChange={update("buyerPhone")} required /></div>
+              <div className="space-y-1"><Label htmlFor="buyerEmail">Email *</Label><Input id="buyerEmail" type="email" value={form.buyerEmail} onChange={update("buyerEmail")} required /></div>
+              <div className="space-y-1"><Label htmlFor="buyerPhone">Phone *</Label><Input id="buyerPhone" value={form.buyerPhone} onChange={update("buyerPhone")} required /></div>
               <Button type="submit" className="w-full" disabled={loading}>{loading ? "Processing..." : "Initiate Payment"}</Button>
             </form>
           </CardContent>

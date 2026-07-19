@@ -9,6 +9,14 @@ export type OrderStatus =
   | "Refunded"
   | "Expired";
 
+export type EscrowTransactionStatus =
+  | "Pending"
+  | "Funded"
+  | "Released"
+  | "Refunded"
+  | "Expired"
+  | "Failed";
+
 export interface OrderDetail {
   id: string;
   orderReference: string;
@@ -31,7 +39,7 @@ export interface OrderDetail {
     monnifyTransactionReference: string | null;
     channel: string;
     amount: number;
-    status: string;
+    status: EscrowTransactionStatus;
     virtualAccountNumber: string | null;
     virtualBankCode: string | null;
     fundedAt: string | null;
@@ -76,4 +84,16 @@ export interface EscrowLinkResponse {
   virtualAccountNumber: string;
   virtualBankCode: string;
   expiresAt: string;
+}
+
+export interface BankDebitInitiatePayload {
+  buyerFirstName: string;
+  buyerLastName: string;
+  buyerEmail: string;
+  buyerPhone: string;
+}
+
+export interface BankDebitInitiateResponse {
+  transactionReference: string;
+  otpMessage: string;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import api from "@/lib/api"
@@ -8,7 +8,6 @@ import EmptyState from "@/components/shared/EmptyState"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle } from "lucide-react"
 import { formatDate } from "@/lib/utils"
-import type { ApiResult } from "@/types"
 import type { Dispute } from "@/types/dispute"
 import { DISPUTE_STATUS_LABELS } from "@/lib/constants"
 
@@ -27,13 +26,13 @@ export default function DisputesList() {
   const { data: disputes, isLoading } = useQuery({
     queryKey: ["adminDisputes"],
     queryFn: () => api.get("/disputes"),
-    select: (res: { data: ApiResult<Dispute[]> }) => res.data.data ?? [],
+    select: (res: { data: Dispute[] }) => res.data ?? [],
   })
 
-  if (isLoading) return <LoadingSpinner message="Loading disputes..." />
+  const all = useMemo(() => disputes ?? [], [disputes])
+  const filtered = useMemo(() => statusFilter === "all" ? all : all.filter((d) => d.status === statusFilter), [all, statusFilter])
 
-  const all = disputes ?? []
-  const filtered = statusFilter === "all" ? all : all.filter((d) => d.status === statusFilter)
+  if (isLoading) return <LoadingSpinner message="Loading disputes..." />
 
   return (
     <div className="space-y-6">

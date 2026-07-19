@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import api from "@/lib/api"
@@ -8,17 +9,9 @@ import EmptyState from "@/components/shared/EmptyState"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle } from "lucide-react"
 import { formatDate } from "@/lib/utils"
-import type { ApiResult, PaginatedList } from "@/types"
+import type { PaginatedList } from "@/types"
 import type { MerchantOrderResponse } from "@/types/merchant"
 import { DISPUTE_STATUS_LABELS } from "@/lib/constants"
-
-const STATUS_COLORS: Record<string, string> = {
-  Open: "bg-red-100 text-red-700",
-  UnderReview: "bg-yellow-100 text-yellow-700",
-  ResolvedRefund: "bg-orange-100 text-orange-700",
-  ResolvedRelease: "bg-green-100 text-green-700",
-  Closed: "bg-gray-100 text-gray-700",
-}
 
 export default function MerchantDisputes() {
   const navigate = useNavigate()
@@ -27,13 +20,13 @@ export default function MerchantDisputes() {
   const { data: orders, isLoading } = useQuery({
     queryKey: ["merchantDisputes"],
     queryFn: () => api.get(`/merchants/${user?.userId}/orders`, { params: { statusFilter: "Disputed", pageSize: 50 } }),
-    select: (res: { data: ApiResult<PaginatedList<MerchantOrderResponse>> }) => res.data.data?.items ?? [],
+    select: (res: { data: PaginatedList<MerchantOrderResponse> }) => res.data?.items ?? [],
     enabled: !!user?.userId,
   })
 
-  if (isLoading) return <LoadingSpinner message="Loading disputes..." />
+  const disputedOrders = useMemo(() => orders ?? [], [orders])
 
-  const disputedOrders = orders ?? []
+  if (isLoading) return <LoadingSpinner message="Loading disputes..." />
 
   return (
     <div className="space-y-6">

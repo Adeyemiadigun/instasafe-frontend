@@ -9,9 +9,9 @@ import EmptyState from "@/components/shared/EmptyState"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, CheckCircle, Clock, MessageSquare } from "lucide-react"
 import { formatDate } from "@/lib/utils"
-import type { ApiResult } from "@/types"
 import type { Dispute } from "@/types/dispute"
 import { DISPUTE_STATUS_LABELS } from "@/lib/constants"
+import { useMemo } from "react"
 
 const STATUS_COLORS: Record<string, string> = {
   Open: "bg-red-100 text-red-700",
@@ -26,15 +26,15 @@ export default function AdminDashboard() {
   const { data: disputes, isLoading } = useQuery({
     queryKey: ["adminDisputes"],
     queryFn: () => api.get("/disputes"),
-    select: (res: { data: ApiResult<Dispute[]> }) => res.data.data ?? [],
+    select: (res: { data: Dispute[] }) => res.data ?? [],
   })
 
-  if (isLoading) return <LoadingSpinner message="Loading dashboard..." />
+  const all = useMemo(() => disputes ?? [], [disputes])
+  const open = useMemo(() => all.filter((d) => d.status === "Open" || d.status === "UnderReview"), [all])
+  const resolved = useMemo(() => all.filter((d) => d.status.startsWith("Resolved")), [all])
+  const recent = useMemo(() => all.slice(0, 5), [all])
 
-  const all = disputes ?? []
-  const open = all.filter((d) => d.status === "Open" || d.status === "UnderReview")
-  const resolved = all.filter((d) => d.status.startsWith("Resolved"))
-  const recent = all.slice(0, 5)
+  if (isLoading) return <LoadingSpinner message="Loading dashboard..." />
 
   return (
     <div className="space-y-6">

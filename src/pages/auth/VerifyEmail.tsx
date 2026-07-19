@@ -19,17 +19,13 @@ export default function VerifyEmail() {
     api.post("/auth/verify-email", { email, token })
       .then((res) => {
         const data = res.data
-        if (data.succeeded) {
-          setStatus("success")
-          setMessage(data.data?.message || "Email verified successfully!")
-        } else {
-          setStatus("error")
-          setMessage(data.errors?.[0] || "Verification failed.")
-        }
+        setStatus("success")
+        setMessage(data.Message || data.message || "Email verified successfully!")
       })
-      .catch(() => {
+      .catch((err) => {
         setStatus("error")
-        setMessage("Verification failed. The link may have expired.")
+        const msg = err.response?.data?.Message || err.response?.data?.message
+        setMessage(msg || "Verification failed. The link may have expired.")
       })
   }, [searchParams])
 

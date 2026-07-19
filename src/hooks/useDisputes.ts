@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import api from "@/lib/api"
-import type { ApiResult } from "@/types"
 import type { Dispute, RaiseDisputePayload, ResolveDisputePayload } from "@/types/dispute"
 
 export function useDispute(disputeId: string) {
   return useQuery({
     queryKey: ["dispute", disputeId],
     queryFn: () => api.get(`/disputes/${disputeId}`),
-    select: (res: { data: ApiResult<Dispute> }) => res.data.data,
+    select: (res: { data: Dispute }) => res.data,
     enabled: !!disputeId,
   })
 }
@@ -16,7 +15,7 @@ export function useOrderDispute(orderId: string) {
   return useQuery({
     queryKey: ["orderDispute", orderId],
     queryFn: () => api.get(`/disputes/order/${orderId}`),
-    select: (res: { data: ApiResult<Dispute | null> }) => res.data.data,
+    select: (res: { data: Dispute | null }) => res.data,
     enabled: !!orderId,
   })
 }

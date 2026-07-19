@@ -14,6 +14,18 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+function mapBackendAuth(raw: Record<string, unknown>): AuthResult {
+  return {
+    token: String(raw.Token || raw.token || ""),
+    refreshToken: String(raw.RefreshToken || raw.refreshToken || ""),
+    userId: String(raw.UserId || raw.userId || ""),
+    email: String(raw.Email || raw.email || ""),
+    firstName: String(raw.FirstName || raw.firstName || ""),
+    lastName: String(raw.LastName || raw.lastName || ""),
+    roles: Array.isArray(raw.Roles || raw.roles) ? (raw.Roles || raw.roles) as string[] : [],
+  };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,11 +38,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       api
         .get("/auth/me")
         .then((res) => {
-          const data = res.data;
-          if (data.succeeded && data.data) {
-            setUser(data.data);
-            storeAuth(data.data.token, data.data.refreshToken, data.data);
-          }
+          setUser(mapBackendAuth(res.data));
+          const mapped = mapBackendAuth(res.data);
+          storeAuth(mapped.token, mapped.refreshToken, mapped);
         })
         .catch(() => {
           clearAuth();
@@ -44,17 +54,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     const res = await api.post("/auth/login", { email, password });
-    const data = res.data;
-    if (!data.succeeded) throw new Error(data.errors?.[0] || "Login failed");
-    setUser(data.data);
-    storeAuth(data.data.token, data.data.refreshToken, data.data);
+    const mapped = mapBackendAuth(res.data);
+    setUser(mapped);
+    storeAuth(mapped.token, mapped.refreshToken, mapped);
   }, []);
 
   const register = useCallback(async (payload: { firstName: string; lastName: string; email: string; password: string; phone?: string }) => {
     const res = await api.post("/auth/register", payload);
     const data = res.data;
-    if (!data.succeeded) throw new Error(data.errors?.[0] || "Registration failed");
-    return data.data.message;
+    return data.Message || data.message || "Registration successful.";
   }, []);
 
   const logout = useCallback(() => {

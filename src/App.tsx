@@ -1,5 +1,7 @@
+import { lazy, Suspense } from "react"
 import { Routes, Route, Navigate } from "react-router-dom"
 import { useAuth } from "@/providers/AuthProvider"
+import LoadingSpinner from "@/components/shared/LoadingSpinner"
 
 import AuthLayout from "@/components/layout/AuthLayout"
 import DashboardLayout from "@/components/layout/DashboardLayout"
@@ -7,31 +9,36 @@ import BuyerLayout from "@/components/layout/BuyerLayout"
 
 import Login from "@/pages/auth/Login"
 import Register from "@/pages/auth/Register"
-import VerifyEmail from "@/pages/auth/VerifyEmail"
 import ForgotPassword from "@/pages/auth/ForgotPassword"
-import ResetPassword from "@/pages/auth/ResetPassword"
-
-import MerchantDashboard from "@/pages/merchant/Dashboard"
-import Orders from "@/pages/merchant/Orders"
-import CreateOrder from "@/pages/merchant/CreateOrder"
-import OrderDetail from "@/pages/merchant/OrderDetail"
-import MerchantDisputes from "@/pages/merchant/Disputes"
-import Settings from "@/pages/merchant/Settings"
-
-import Checkout from "@/pages/buyer/Checkout"
-import Payment from "@/pages/buyer/Payment"
-import ScanDelivery from "@/pages/buyer/ScanDelivery"
-import TrackOrder from "@/pages/buyer/TrackOrder"
-
-import AdminDashboard from "@/pages/admin/AdminDashboard"
-import DisputesList from "@/pages/admin/DisputesList"
-import DisputeDetail from "@/pages/admin/DisputeDetail"
-
-import ChatbotSessions from "@/pages/whatsapp/ChatbotSessions"
-import ChatbotSessionDetail from "@/pages/whatsapp/ChatbotSessionDetail"
 
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
+
+const VerifyEmail = lazy(() => import("@/pages/auth/VerifyEmail"))
+const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"))
+
+const MerchantDashboard = lazy(() => import("@/pages/merchant/Dashboard"))
+const Orders = lazy(() => import("@/pages/merchant/Orders"))
+const CreateOrder = lazy(() => import("@/pages/merchant/CreateOrder"))
+const OrderDetail = lazy(() => import("@/pages/merchant/OrderDetail"))
+const MerchantDisputes = lazy(() => import("@/pages/merchant/Disputes"))
+const Settings = lazy(() => import("@/pages/merchant/Settings"))
+
+const Checkout = lazy(() => import("@/pages/buyer/Checkout"))
+const Payment = lazy(() => import("@/pages/buyer/Payment"))
+const ScanDelivery = lazy(() => import("@/pages/buyer/ScanDelivery"))
+const TrackOrder = lazy(() => import("@/pages/buyer/TrackOrder"))
+
+const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"))
+const DisputesList = lazy(() => import("@/pages/admin/DisputesList"))
+const DisputeDetail = lazy(() => import("@/pages/admin/DisputeDetail"))
+
+const ChatbotSessions = lazy(() => import("@/pages/whatsapp/ChatbotSessions"))
+const ChatbotSessionDetail = lazy(() => import("@/pages/whatsapp/ChatbotSessionDetail"))
+
+function SuspenseWrap({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<LoadingSpinner message="Loading..." />}>{children}</Suspense>
+}
 
 function MerchantGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth()
@@ -58,36 +65,36 @@ export default function App() {
       <Route element={<AuthLayout />}>
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
-        <Route path="/auth/verify-email" element={<VerifyEmail />} />
+        <Route path="/auth/verify-email" element={<SuspenseWrap><VerifyEmail /></SuspenseWrap>} />
         <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-        <Route path="/auth/reset-password" element={<ResetPassword />} />
+        <Route path="/auth/reset-password" element={<SuspenseWrap><ResetPassword /></SuspenseWrap>} />
       </Route>
 
       <Route path="/dashboard" element={<MerchantGuard><DashboardLayout sidebar="merchant" /></MerchantGuard>}>
-        <Route index element={<MerchantDashboard />} />
-        <Route path="orders" element={<Orders />} />
-        <Route path="orders/new" element={<CreateOrder />} />
-        <Route path="orders/:id" element={<OrderDetail />} />
-        <Route path="disputes" element={<MerchantDisputes />} />
-        <Route path="settings" element={<Settings />} />
+        <Route index element={<SuspenseWrap><MerchantDashboard /></SuspenseWrap>} />
+        <Route path="orders" element={<SuspenseWrap><Orders /></SuspenseWrap>} />
+        <Route path="orders/new" element={<SuspenseWrap><CreateOrder /></SuspenseWrap>} />
+        <Route path="orders/:id" element={<SuspenseWrap><OrderDetail /></SuspenseWrap>} />
+        <Route path="disputes" element={<SuspenseWrap><MerchantDisputes /></SuspenseWrap>} />
+        <Route path="settings" element={<SuspenseWrap><Settings /></SuspenseWrap>} />
       </Route>
 
       <Route element={<BuyerLayout />}>
-        <Route path="/order/:orderId" element={<Checkout />} />
-        <Route path="/order/:orderId/pay" element={<Payment />} />
-        <Route path="/order/:orderId/scan" element={<ScanDelivery />} />
-        <Route path="/order/:orderId/track" element={<TrackOrder />} />
+        <Route path="/order/:orderId" element={<SuspenseWrap><Checkout /></SuspenseWrap>} />
+        <Route path="/order/:orderId/pay" element={<SuspenseWrap><Payment /></SuspenseWrap>} />
+        <Route path="/order/:orderId/scan" element={<SuspenseWrap><ScanDelivery /></SuspenseWrap>} />
+        <Route path="/order/:orderId/track" element={<SuspenseWrap><TrackOrder /></SuspenseWrap>} />
       </Route>
 
       <Route path="/admin" element={<AdminGuard><DashboardLayout sidebar="admin" /></AdminGuard>}>
-        <Route index element={<AdminDashboard />} />
-        <Route path="disputes" element={<DisputesList />} />
-        <Route path="disputes/:id" element={<DisputeDetail />} />
+        <Route index element={<SuspenseWrap><AdminDashboard /></SuspenseWrap>} />
+        <Route path="disputes" element={<SuspenseWrap><DisputesList /></SuspenseWrap>} />
+        <Route path="disputes/:id" element={<SuspenseWrap><DisputeDetail /></SuspenseWrap>} />
       </Route>
 
       <Route path="/whatsapp" element={<AdminGuard><DashboardLayout sidebar="admin" /></AdminGuard>}>
-        <Route path="sessions" element={<ChatbotSessions />} />
-        <Route path="sessions/:id" element={<ChatbotSessionDetail />} />
+        <Route path="sessions" element={<SuspenseWrap><ChatbotSessions /></SuspenseWrap>} />
+        <Route path="sessions/:id" element={<SuspenseWrap><ChatbotSessionDetail /></SuspenseWrap>} />
       </Route>
 
       <Route path="*" element={<Navigate to="/not-found" replace />} />

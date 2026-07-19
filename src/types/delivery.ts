@@ -1,9 +1,15 @@
 export type DeliverySessionStatusValue =
-  | "Pending"
-  | "MerchantPickedUp"
-  | "BuyerConfirmed"
-  | "Disputed"
+  | "PickedUp"
+  | "Delivered"
+  | "Failed"
   | "Expired";
+
+export type DeliveryFailureReason =
+  | "None"
+  | "SessionMismatch"
+  | "FingerprintMismatch"
+  | "OrderMismatch"
+  | "SessionExpired";
 
 export interface QrCodesResponse {
   merchantQrToken: string;
@@ -28,5 +34,5 @@ export interface DeliverySessionStatus {
   pickupTimestamp: string | null;
   deliveryTimestamp: string | null;
   expiresAt: string | null;
-  failureReason: string | null;
+  failureReason: DeliveryFailureReason | null;
 }

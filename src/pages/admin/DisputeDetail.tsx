@@ -9,6 +9,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { getApiErrorMessage } from "@/lib/errorHandler"
 import { toast } from "sonner"
 import { ArrowLeft } from "lucide-react"
 
@@ -25,26 +26,24 @@ export default function DisputeDetail() {
   if (!dispute) return <div className="text-center py-12 text-muted-foreground">Dispute not found.</div>
 
   const handleResolve = async (resolution: "refund" | "release") => {
-    const res = await resolveDispute.mutateAsync({
-      resolution,
-      adminNotes: adminNotes || undefined,
-      resolvedByUserId: user?.userId || "",
-    })
-    const result = res.data
-    if (result.succeeded) {
-      toast.success(result.data?.message || "Dispute resolved!")
-    } else {
-      toast.error(result.errors?.[0] || "Failed to resolve dispute.")
+    try {
+      await resolveDispute.mutateAsync({
+        resolution,
+        adminNotes: adminNotes || undefined,
+        resolvedByUserId: user?.userId || "",
+      })
+      toast.success("Dispute resolved!")
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
     }
   }
 
   const handlePayout = async () => {
-    const res = await executePayout.mutateAsync()
-    const result = res.data
-    if (result.succeeded) {
+    try {
+      await executePayout.mutateAsync()
       toast.success("Payout executed successfully!")
-    } else {
-      toast.error(result.errors?.[0] || "Failed to execute payout.")
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
     }
   }
 

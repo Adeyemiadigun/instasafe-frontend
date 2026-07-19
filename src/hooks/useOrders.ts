@@ -1,8 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import api from "@/lib/api"
-import type { ApiResult, PaginatedList, OrderDetail, CreateOrderPayload, EscrowLinkPayload, TimelineEntry } from "@/types"
+import type { PaginatedList, OrderDetail, CreateOrderPayload, EscrowLinkPayload, TimelineEntry } from "@/types"
 import type { MerchantOrderResponse } from "@/types/merchant"
-import { toast } from "sonner"
 
 export function useMerchantOrders(merchantId: string, page: number = 1, pageSize: number = 10, statusFilter?: string) {
   return useQuery({
@@ -11,7 +10,7 @@ export function useMerchantOrders(merchantId: string, page: number = 1, pageSize
       api.get(`/merchants/${merchantId}/orders`, {
         params: { pageNumber: page, pageSize, statusFilter },
       }),
-    select: (res: { data: ApiResult<PaginatedList<MerchantOrderResponse>> }) => res.data.data,
+    select: (res: { data: PaginatedList<MerchantOrderResponse> }) => res.data,
   })
 }
 
@@ -19,7 +18,7 @@ export function useOrder(orderId: string) {
   return useQuery({
     queryKey: ["order", orderId],
     queryFn: () => api.get(`/orders/${orderId}`),
-    select: (res: { data: ApiResult<OrderDetail> }) => res.data.data,
+    select: (res: { data: OrderDetail }) => res.data,
     enabled: !!orderId,
   })
 }
@@ -28,7 +27,7 @@ export function useOrderTimeline(orderId: string) {
   return useQuery({
     queryKey: ["orderTimeline", orderId],
     queryFn: () => api.get(`/orders/${orderId}/timeline`),
-    select: (res: { data: ApiResult<TimelineEntry[]> }) => res.data.data,
+    select: (res: { data: TimelineEntry[] }) => res.data,
     enabled: !!orderId,
   })
 }

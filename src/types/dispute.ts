@@ -5,6 +5,8 @@ export type DisputeStatus =
   | "ResolvedRelease"
   | "Closed";
 
+export type PayoutStatus = "Pending" | "Processing" | "Completed" | "Failed";
+
 export interface Dispute {
   id: string;
   orderId: string;
@@ -27,15 +29,26 @@ export interface RaiseDisputePayload {
   evidenceUrls?: string;
 }
 
+export interface RaiseDisputeResponse {
+  disputeId: string;
+  status: DisputeStatus;
+  message: string;
+}
+
 export interface ResolveDisputePayload {
   resolution: string;
   adminNotes?: string;
   resolvedByUserId: string;
 }
 
+export interface ResolveDisputeResponse {
+  outcome: "Refunded" | "Released";
+  message: string;
+}
+
 export interface PayoutResponse {
   totalAmount: number;
   merchantAmount: number;
   platformCommission: number;
-  payoutStatus: string;
+  payoutStatus: PayoutStatus;
 }
