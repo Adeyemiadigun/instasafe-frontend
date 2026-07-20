@@ -35,7 +35,7 @@ export function useOrderTimeline(orderId: string) {
 export function useCreateOrder() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: CreateOrderPayload) => api.post("/orders", data),
+    mutationFn: (data: CreateOrderPayload) => api.post("/orders", data) as Promise<{ data: { orderId: string; orderReference?: string } }>,
     onSuccess: () => qc.invalidateQueries({ queryKey: ["merchantOrders"] }),
   })
 }
