@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useParams, Link } from "react-router-dom"
-import { useOrder, useOrderTimeline, useGenerateEscrowLink } from "@/hooks/useOrders"
+import { useParams, Link, useNavigate } from "react-router-dom"
+import { useOrder, useOrderTimeline, useGenerateEscrowLink, useDeleteOrder } from "@/hooks/useOrders"
 import { useGenerateQrCodes } from "@/hooks/useDelivery"
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge"
 import LoadingSpinner from "@/components/shared/LoadingSpinner"
@@ -29,6 +29,9 @@ export default function OrderDetail() {
   const [escrowResult, setEscrowResult] = useState<EscrowLinkResponse | null>(null)
   const [qrResult, setQrResult] = useState<QrCodesResponse | null>(null)
 
+  const deleteOrder = useDeleteOrder()
+  const navigate = useNavigate()
+
   const handleGenerateLink = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
@@ -48,6 +51,17 @@ export default function OrderDetail() {
     }
   }
 
+  const handleDeleteOrder = async () => {
+    if (!confirm("Are you sure you want to delete this order? If a dispatcher was assigned, they will be notified.")) return;
+    try {
+      await deleteOrder.mutateAsync(order!.id)
+      toast.success("Order deleted successfully")
+      navigate("/dashboard/orders")
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+    }
+  }
+
   if (isLoading) return <LoadingSpinner message="Loading order..." />
   if (!order) return <p className="text-center py-8 text-muted-foreground">Order not found.</p>
 
@@ -61,7 +75,14 @@ export default function OrderDetail() {
             <p className="text-muted-foreground text-sm truncate">Order {order.orderReference}</p>
           </div>
         </div>
-        <div className="sm:ml-auto"><OrderStatusBadge status={order.status as OrderStatus} /></div>
+        <div className="sm:ml-auto flex items-center gap-4">
+          <OrderStatusBadge status={order.status as OrderStatus} />
+          {(order.status === "Draft" || order.status === "PendingPayment") && (
+            <Button variant="destructive" size="sm" onClick={handleDeleteOrder} disabled={deleteOrder.isPending}>
+              {deleteOrder.isPending ? "Deleting..." : "Delete Order"}
+            </Button>
+          )}
+        </div>
       </div>
 
       <Tabs defaultValue="overview">

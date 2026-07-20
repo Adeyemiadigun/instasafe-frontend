@@ -15,7 +15,18 @@ const registerSchema = z.object({
   lastName: z.string().min(1, "Last name is required").max(100),
   email: z.string().min(1, "Email is required").email("Invalid email format"),
   businessName: z.string().min(2, "Business name is required").max(100),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
+  dateOfBirth: z.string().min(1, "Date of birth is required").refine((dateString) => {
+    const dob = new Date(dateString);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    
+    return age >= 18;
+  }, { message: "You must be at least 18 years old to register" }),
   password: z.string().min(8, "Password must be at least 8 characters"),
   phone: z.string().optional(),
 })

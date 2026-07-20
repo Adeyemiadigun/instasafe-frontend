@@ -45,3 +45,11 @@ export function useGenerateEscrowLink(orderId: string) {
     mutationFn: (data: EscrowLinkPayload) => api.post(`/orders/${orderId}/escrow-link`, data),
   })
 }
+
+export function useDeleteOrder() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (orderId: string) => api.delete(`/orders/${orderId}`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["merchantOrders"] }),
+  })
+}
