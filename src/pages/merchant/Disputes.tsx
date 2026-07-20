@@ -30,7 +30,7 @@ export default function MerchantDisputes() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Disputes</h1>
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Disputes</h1>
       {disputedOrders.length === 0 ? (
         <EmptyState
           icon={AlertTriangle}
@@ -38,15 +38,15 @@ export default function MerchantDisputes() {
           description="No disputes have been raised on your orders."
         />
       ) : (
-        <div className="rounded-md border overflow-x-auto">
-          <Table className="min-w-[600px]">
+        <div className="bg-card rounded-xl border border-border/60 overflow-hidden">
+          <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Order Ref</TableHead>
-                <TableHead>Item</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="font-semibold">Order Ref</TableHead>
+                <TableHead className="font-semibold">Item</TableHead>
+                <TableHead className="font-semibold">Price</TableHead>
+                <TableHead className="font-semibold">Status</TableHead>
+                <TableHead className="font-semibold">Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

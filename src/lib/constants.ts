@@ -13,15 +13,15 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
 };
 
 export const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
-  Draft: "bg-gray-100 text-gray-700",
-  PendingPayment: "bg-yellow-100 text-yellow-700",
-  FundedInEscrow: "bg-blue-100 text-blue-700",
-  Dispatched: "bg-purple-100 text-purple-700",
-  Delivered: "bg-indigo-100 text-indigo-700",
-  Disputed: "bg-red-100 text-red-700",
-  CompletedReleased: "bg-green-100 text-green-700",
-  Refunded: "bg-orange-100 text-orange-700",
-  Expired: "bg-gray-100 text-gray-500",
+  Draft: "bg-stone-100 text-stone-600",
+  PendingPayment: "bg-amber-50 text-amber-700 border-amber-200",
+  FundedInEscrow: "bg-sky-50 text-sky-700 border-sky-200",
+  Dispatched: "bg-violet-50 text-violet-700 border-violet-200",
+  Delivered: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  Disputed: "bg-red-50 text-red-700 border-red-200",
+  CompletedReleased: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Refunded: "bg-orange-50 text-orange-700 border-orange-200",
+  Expired: "bg-stone-100 text-stone-500",
 };
 
 export const DISPUTE_STATUS_LABELS: Record<DisputeStatus, string> = {

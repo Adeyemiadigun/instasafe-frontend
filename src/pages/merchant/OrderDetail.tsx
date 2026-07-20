@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Link as LinkIcon, QrCode, Clock } from "lucide-react"
+import { ArrowLeft, Link as LinkIcon, QrCode, Clock, Copy, Check } from "lucide-react"
 import { getApiErrorMessage } from "@/lib/errorHandler"
 import { formatDate } from "@/lib/utils"
 import { toast } from "sonner"
@@ -28,6 +28,14 @@ export default function OrderDetail() {
   const [buyerForm, setBuyerForm] = useState({ buyerFirstName: "", buyerLastName: "", buyerEmail: "", buyerPhone: "" })
   const [escrowResult, setEscrowResult] = useState<EscrowLinkResponse | null>(null)
   const [qrResult, setQrResult] = useState<QrCodesResponse | null>(null)
+  const [copied, setCopied] = useState<string | null>(null)
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(label)
+    toast.success(`${label} copied!`)
+    setTimeout(() => setCopied(null), 2000)
+  }
 
   const handleGenerateLink = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,15 +57,15 @@ export default function OrderDetail() {
   }
 
   if (isLoading) return <LoadingSpinner message="Loading order..." />
-  if (!order) return <p className="text-center py-8 text-muted-foreground">Order not found.</p>
+  if (!order) return <p className="text-center py-12 text-muted-foreground">Order not found.</p>
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <Link to="/dashboard/orders" className="p-2 hover:bg-muted rounded-md shrink-0"><ArrowLeft className="h-4 w-4" /></Link>
+          <Link to="/dashboard/orders" className="p-2 hover:bg-muted rounded-lg transition-colors shrink-0"><ArrowLeft className="h-4 w-4" /></Link>
           <div className="min-w-0 flex-1">
-            <h1 className="text-xl sm:text-2xl font-bold truncate">{order.itemName}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold font-[family-name:var(--font-display)] truncate">{order.itemName}</h1>
             <p className="text-muted-foreground text-sm truncate">Order {order.orderReference}</p>
           </div>
         </div>
@@ -65,22 +73,22 @@ export default function OrderDetail() {
       </div>
 
       <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="payment">Payment</TabsTrigger>
-          <TabsTrigger value="delivery">Delivery</TabsTrigger>
-          <TabsTrigger value="timeline">Timeline</TabsTrigger>
+        <TabsList className="bg-muted/50 h-11 p-1">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-card data-[state=active]:shadow-sm font-medium">Overview</TabsTrigger>
+          <TabsTrigger value="payment" className="data-[state=active]:bg-card data-[state=active]:shadow-sm font-medium">Payment</TabsTrigger>
+          <TabsTrigger value="delivery" className="data-[state=active]:bg-card data-[state=active]:shadow-sm font-medium">Delivery</TabsTrigger>
+          <TabsTrigger value="timeline" className="data-[state=active]:bg-card data-[state=active]:shadow-sm font-medium">Timeline</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-4">
+        <TabsContent value="overview" className="space-y-4 mt-4">
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader><CardTitle className="text-base">Item Details</CardTitle></CardHeader>
               <CardContent className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Price</span><span className="font-medium"><CurrencyDisplay amount={order.price} /></span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">Currency</span><span>{order.currency}</span></div>
-                {order.itemDescription && <p className="pt-2 border-t">{order.itemDescription}</p>}
-                {order.deliveryAddress && <div className="flex justify-between"><span className="text-muted-foreground">Address</span><span>{order.deliveryAddress}</span></div>}
+                {order.itemDescription && <p className="pt-3 border-t border-border/60 text-muted-foreground text-xs mb-1">Description<p className="text-foreground mt-1">{order.itemDescription}</p></p>}
+                {order.deliveryAddress && <div className="flex justify-between pt-3 border-t border-border/60"><span className="text-muted-foreground">Address</span><span>{order.deliveryAddress}</span></div>}
               </CardContent>
             </Card>
             <Card>
@@ -98,7 +106,7 @@ export default function OrderDetail() {
           </div>
         </TabsContent>
 
-        <TabsContent value="payment" className="space-y-4">
+        <TabsContent value="payment" className="space-y-4 mt-4">
           {order.status === "Draft" && !escrowResult && (
             <Card>
               <CardHeader><CardTitle className="text-base">Generate Escrow Link</CardTitle></CardHeader>
@@ -118,11 +126,19 @@ export default function OrderDetail() {
           {escrowResult && (
             <Card>
               <CardHeader><CardTitle className="text-base flex items-center gap-2"><LinkIcon className="h-4 w-4" /> Escrow Link Generated</CardTitle></CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Virtual Account</span><span className="font-mono font-medium">{escrowResult.virtualAccountNumber}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Bank Code</span><span>{escrowResult.virtualBankCode}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Expires</span><span>{formatDate(escrowResult.expiresAt)}</span></div>
-                <p className="pt-2 text-muted-foreground">Share the checkout link with the buyer to complete payment.</p>
+              <CardContent className="space-y-3 text-sm">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
+                  <span className="text-muted-foreground">Virtual Account</span>
+                  <div className="flex items-center gap-2">
+                    <code className="font-mono font-semibold">{escrowResult.virtualAccountNumber}</code>
+                    <button onClick={() => copyToClipboard(escrowResult.virtualAccountNumber, "Account number")} className="p-1 hover:bg-muted rounded transition-colors">
+                      {copied === "Account number" ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
+                    </button>
+                  </div>
+                </div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Bank Code</span><span className="font-medium">{escrowResult.virtualBankCode}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Expires</span><span className="font-medium">{formatDate(escrowResult.expiresAt)}</span></div>
+                <p className="pt-3 text-muted-foreground border-t border-border/60">Share the checkout link with the buyer to complete payment.</p>
               </CardContent>
             </Card>
           )}
@@ -139,7 +155,7 @@ export default function OrderDetail() {
           )}
         </TabsContent>
 
-        <TabsContent value="delivery" className="space-y-4">
+        <TabsContent value="delivery" className="space-y-4 mt-4">
           <Card>
             <CardHeader><CardTitle className="text-base flex items-center gap-2"><QrCode className="h-4 w-4" /> QR Codes</CardTitle></CardHeader>
             <CardContent>
@@ -147,9 +163,25 @@ export default function OrderDetail() {
                 <Button onClick={handleGenerateQr} disabled={generateQr.isPending}>{generateQr.isPending ? "Generating..." : "Generate QR Codes"}</Button>
               )}
               {qrResult && (
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-muted-foreground">Merchant Token</span><code className="bg-muted px-2 py-1 rounded text-xs break-all">{qrResult.merchantQrToken}</code></div>
-                  <div className="flex justify-between"><span className="text-muted-foreground">Buyer Token</span><code className="bg-muted px-2 py-1 rounded text-xs break-all">{qrResult.buyerQrToken}</code></div>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
+                    <span className="text-muted-foreground">Merchant Token</span>
+                    <div className="flex items-center gap-2">
+                      <code className="bg-muted px-2 py-1 rounded text-xs break-all max-w-[200px]">{qrResult.merchantQrToken}</code>
+                      <button onClick={() => copyToClipboard(qrResult.merchantQrToken, "Merchant token")} className="p-1 hover:bg-muted rounded transition-colors">
+                        {copied === "Merchant token" ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
+                    <span className="text-muted-foreground">Buyer Token</span>
+                    <div className="flex items-center gap-2">
+                      <code className="bg-muted px-2 py-1 rounded text-xs break-all max-w-[200px]">{qrResult.buyerQrToken}</code>
+                      <button onClick={() => copyToClipboard(qrResult.buyerQrToken, "Buyer token")} className="p-1 hover:bg-muted rounded transition-colors">
+                        {copied === "Buyer token" ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
               {order.deliverySession && (
@@ -163,24 +195,24 @@ export default function OrderDetail() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="timeline" className="space-y-4">
+        <TabsContent value="timeline" className="space-y-4 mt-4">
           <Card>
             <CardHeader><CardTitle className="text-base flex items-center gap-2"><Clock className="h-4 w-4" /> Timeline</CardTitle></CardHeader>
             <CardContent>
               {!timeline || timeline.length === 0 ? (
-                <p className="text-muted-foreground text-sm">No events yet.</p>
+                <p className="text-muted-foreground text-sm py-4 text-center">No events yet.</p>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-0">
                   {timeline.map((entry, i) => (
                     <div key={i} className="flex gap-4">
                       <div className="flex flex-col items-center">
-                        <div className="h-3 w-3 rounded-full bg-emerald-500 mt-1" />
-                        {i < timeline.length - 1 && <div className="w-px flex-1 bg-border" />}
+                        <div className={`h-3 w-3 rounded-full mt-1.5 shrink-0 ${i === 0 ? "bg-primary ring-4 ring-primary/10" : "bg-border"}`} />
+                        {i < timeline.length - 1 && <div className="w-px flex-1 bg-border/60" />}
                       </div>
-                      <div className="pb-4">
-                        <p className="font-medium text-sm">{entry.event}</p>
-                        <p className="text-xs text-muted-foreground">{formatDate(entry.timestamp)}</p>
-                        {entry.detail && <p className="text-sm text-muted-foreground mt-1">{entry.detail}</p>}
+                      <div className="pb-6 flex-1">
+                        <p className="font-semibold text-sm">{entry.event}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{formatDate(entry.timestamp)}</p>
+                        {entry.detail && <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{entry.detail}</p>}
                       </div>
                     </div>
                   ))}

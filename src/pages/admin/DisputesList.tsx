@@ -37,12 +37,12 @@ export default function DisputesList() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">All Disputes</h1>
+        <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">All Disputes</h1>
         <select
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 w-full sm:w-auto rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="h-10 w-full sm:w-auto rounded-lg border border-input bg-card px-3 py-2 text-sm font-medium"
         >
           <option value="all">All Statuses</option>
           {Object.entries(DISPUTE_STATUS_LABELS).map(([key, label]) => (
@@ -54,35 +54,35 @@ export default function DisputesList() {
       {filtered.length === 0 ? (
         <EmptyState icon={AlertTriangle} title="No disputes" description="No disputes match your filter." />
       ) : (
-        <div className="rounded-md border overflow-x-auto">
-          <Table className="min-w-[600px]">
+        <div className="bg-card rounded-xl border border-border/60 overflow-hidden">
+          <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Order</TableHead>
-                <TableHead>Buyer</TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="font-semibold">Order</TableHead>
+                <TableHead className="font-semibold">Buyer</TableHead>
+                <TableHead className="font-semibold">Reason</TableHead>
+                <TableHead className="font-semibold">Status</TableHead>
+                <TableHead className="font-semibold">Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((d) => (
+              {filtered.map((d, i) => (
                 <TableRow
                   key={d.id}
-                  className="cursor-pointer hover:bg-muted/50"
+                  className={`cursor-pointer hover:bg-muted/50 ${i % 2 === 0 ? "bg-muted/20" : ""}`}
                   tabIndex={0}
                   onClick={() => navigate(`/admin/disputes/${d.id}`)}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
                 >
-                  <TableCell className="font-medium">{d.orderReference}</TableCell>
+                  <TableCell className="font-semibold text-primary">{d.orderReference}</TableCell>
                   <TableCell>{d.buyerName}</TableCell>
-                  <TableCell className="max-w-[200px] truncate">{d.reason}</TableCell>
+                  <TableCell className="max-w-[200px] truncate text-muted-foreground">{d.reason}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className={STATUS_COLORS[d.status]}>
                       {DISPUTE_STATUS_LABELS[d.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell>{formatDate(d.createdAt)}</TableCell>
+                  <TableCell className="text-muted-foreground text-sm">{formatDate(d.createdAt)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

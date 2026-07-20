@@ -49,35 +49,35 @@ export default function CreateOrder() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Create New Order</h1>
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] mb-6">Create New Order</h1>
       <Card>
         <CardHeader>
           <CardTitle>Order Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="itemName">Item Name *</Label>
-              <Input id="itemName" {...register("itemName")} />
+              <Label htmlFor="itemName" className="text-sm font-medium">Item Name *</Label>
+              <Input id="itemName" {...register("itemName")} className="h-10" />
               {errors.itemName && <p className="text-sm text-destructive">{errors.itemName.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="itemDescription">Description</Label>
-              <Textarea id="itemDescription" {...register("itemDescription")} />
+              <Label htmlFor="itemDescription" className="text-sm font-medium">Description</Label>
+              <Textarea id="itemDescription" {...register("itemDescription")} rows={3} />
               {errors.itemDescription && <p className="text-sm text-destructive">{errors.itemDescription.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="price">Price (NGN) *</Label>
-              <Input id="price" type="number" step="0.01" {...register("price")} />
+              <Label htmlFor="price" className="text-sm font-medium">Price (NGN) *</Label>
+              <Input id="price" type="number" step="0.01" {...register("price")} className="h-10" />
               {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="deliveryAddress">Delivery Address</Label>
-              <Input id="deliveryAddress" {...register("deliveryAddress")} />
+              <Label htmlFor="deliveryAddress" className="text-sm font-medium">Delivery Address</Label>
+              <Input id="deliveryAddress" {...register("deliveryAddress")} className="h-10" />
             </div>
-            <div className="flex gap-3 justify-end">
-              <Button type="button" variant="outline" onClick={() => navigate("/dashboard/orders")}>Cancel</Button>
-              <Button type="submit" disabled={createOrder.isPending}>
+            <div className="flex gap-3 justify-end pt-2">
+              <Button type="button" variant="outline" onClick={() => navigate("/dashboard/orders")} className="h-10">Cancel</Button>
+              <Button type="submit" disabled={createOrder.isPending} className="h-10">
                 {createOrder.isPending ? "Creating..." : "Create Order"}
               </Button>
             </div>

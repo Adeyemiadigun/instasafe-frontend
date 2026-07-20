@@ -18,7 +18,7 @@ export default function TrackOrder() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Track Order</h1>
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Track Order</h1>
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -28,7 +28,7 @@ export default function TrackOrder() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <div className="flex justify-between"><span className="text-muted-foreground">Price</span><CurrencyDisplay amount={order.price} /></div>
-          <div className="flex justify-between"><span className="text-muted-foreground">Seller</span><span>{order.merchant.businessName}</span></div>
+          <div className="flex justify-between"><span className="text-muted-foreground">Seller</span><span className="font-medium">{order.merchant.businessName}</span></div>
         </CardContent>
       </Card>
 
@@ -36,19 +36,19 @@ export default function TrackOrder() {
         <CardHeader><CardTitle className="text-base">Timeline</CardTitle></CardHeader>
         <CardContent>
           {!timeline || timeline.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No events yet.</p>
+            <p className="text-muted-foreground text-sm py-4 text-center">No events yet.</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-0">
               {timeline.map((entry, i) => (
                 <div key={i} className="flex gap-4">
                   <div className="flex flex-col items-center">
-                    <div className="h-3 w-3 rounded-full bg-emerald-500 mt-1" />
-                    {i < timeline.length - 1 && <div className="w-px flex-1 bg-border" />}
+                    <div className={`h-3 w-3 rounded-full mt-1.5 shrink-0 ${i === 0 ? "bg-primary ring-4 ring-primary/10" : "bg-border"}`} />
+                    {i < timeline.length - 1 && <div className="w-px flex-1 bg-border/60" />}
                   </div>
-                  <div className="pb-4">
-                    <p className="font-medium text-sm">{entry.event}</p>
-                    <p className="text-xs text-muted-foreground">{formatDate(entry.timestamp)}</p>
-                    {entry.detail && <p className="text-sm text-muted-foreground mt-1">{entry.detail}</p>}
+                  <div className="pb-6 flex-1">
+                    <p className="font-semibold text-sm">{entry.event}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{formatDate(entry.timestamp)}</p>
+                    {entry.detail && <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{entry.detail}</p>}
                   </div>
                 </div>
               ))}
@@ -59,7 +59,7 @@ export default function TrackOrder() {
 
       {order.status === "Delivered" && (
         <Link to={`/order/${orderId}/scan`}>
-          <Button className="w-full" size="lg">Confirm Delivery</Button>
+          <Button className="w-full h-11" size="lg">Confirm Delivery</Button>
         </Link>
       )}
     </div>

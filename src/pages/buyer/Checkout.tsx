@@ -17,7 +17,7 @@ export default function Checkout() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Order Checkout</h1>
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Order Checkout</h1>
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -26,24 +26,24 @@ export default function Checkout() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {order.itemImageUrl && <img src={order.itemImageUrl} alt={order.itemName} className="w-full h-48 object-cover rounded-md" />}
-          {order.itemDescription && <p className="text-muted-foreground">{order.itemDescription}</p>}
-          <div className="flex justify-between text-lg font-semibold">
+          {order.itemImageUrl && <img src={order.itemImageUrl} alt={order.itemName} className="w-full h-48 object-cover rounded-xl" />}
+          {order.itemDescription && <p className="text-muted-foreground leading-relaxed">{order.itemDescription}</p>}
+          <div className="flex justify-between text-lg font-semibold pt-3 border-t border-border/60">
             <span>Price</span>
             <CurrencyDisplay amount={order.price} />
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Seller</span>
-            <span>{order.merchant.businessName}</span>
+            <span className="font-medium">{order.merchant.businessName}</span>
           </div>
           {order.status === "PendingPayment" && (
             <Link to={`/order/${orderId}/pay`}>
-              <Button className="w-full" size="lg">Pay Now</Button>
+              <Button className="w-full h-11" size="lg">Pay Now</Button>
             </Link>
           )}
           {order.status !== "PendingPayment" && order.status !== "Draft" && (
             <Link to={`/order/${orderId}/track`}>
-              <Button variant="outline" className="w-full">Track Order</Button>
+              <Button variant="outline" className="w-full h-11">Track Order</Button>
             </Link>
           )}
         </CardContent>

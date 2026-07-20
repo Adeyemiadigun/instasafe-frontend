@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import api from "@/lib/api"
-import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import StatCard from "@/components/shared/StatCard"
 import LoadingSpinner from "@/components/shared/LoadingSpinner"
@@ -38,57 +37,57 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Admin Dashboard</h1>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={AlertTriangle} label="Total Disputes" value={all.length} />
         <StatCard icon={Clock} label="Open" value={open.length} />
         <StatCard icon={CheckCircle} label="Resolved" value={resolved.length} />
         <StatCard icon={MessageSquare} label="WhatsApp Sessions" value="—" />
       </div>
 
-      <Card>
-        <CardContent className="py-4">
-          <h2 className="text-lg font-semibold mb-4">Recent Disputes</h2>
+      <div className="bg-card rounded-xl border border-border/60 overflow-hidden">
+        <div className="p-6 pb-4">
+          <h2 className="text-lg font-semibold font-[family-name:var(--font-display)]">Recent Disputes</h2>
+        </div>
+        <div className="px-6 pb-6">
           {recent.length === 0 ? (
             <EmptyState icon={CheckCircle} title="No disputes" description="No disputes have been raised yet." />
           ) : (
-            <div className="overflow-x-auto">
-              <Table className="min-w-[600px]">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order</TableHead>
-                    <TableHead>Buyer</TableHead>
-                    <TableHead>Reason</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="font-semibold">Order</TableHead>
+                  <TableHead className="font-semibold">Buyer</TableHead>
+                  <TableHead className="font-semibold">Reason</TableHead>
+                  <TableHead className="font-semibold">Status</TableHead>
+                  <TableHead className="font-semibold">Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recent.map((d, i) => (
+                  <TableRow
+                    key={d.id}
+                    className={`cursor-pointer hover:bg-muted/50 ${i % 2 === 0 ? "bg-muted/20" : ""}`}
+                    tabIndex={0}
+                    onClick={() => navigate(`/admin/disputes/${d.id}`)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
+                  >
+                    <TableCell className="font-semibold text-primary">{d.orderReference}</TableCell>
+                    <TableCell>{d.buyerName}</TableCell>
+                    <TableCell className="max-w-[200px] truncate text-muted-foreground">{d.reason}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={STATUS_COLORS[d.status]}>
+                        {DISPUTE_STATUS_LABELS[d.status]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{formatDate(d.createdAt)}</TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {recent.map((d) => (
-                    <TableRow
-                      key={d.id}
-                      className="cursor-pointer hover:bg-muted/50"
-                      tabIndex={0}
-                      onClick={() => navigate(`/admin/disputes/${d.id}`)}
-                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
-                    >
-                      <TableCell className="font-medium">{d.orderReference}</TableCell>
-                      <TableCell>{d.buyerName}</TableCell>
-                      <TableCell className="max-w-[200px] truncate">{d.reason}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={STATUS_COLORS[d.status]}>
-                          {DISPUTE_STATUS_LABELS[d.status]}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{formatDate(d.createdAt)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                ))}
+              </TableBody>
+            </Table>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }
