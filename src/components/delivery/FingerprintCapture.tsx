@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import FingerprintJS from "@fingerprintjs/fingerprintjs"
+import { load } from "@fingerprintjs/fingerprintjs"
 import { Loader2, Fingerprint } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -15,7 +15,7 @@ export default function FingerprintCapture({ onCapture }: FingerprintCaptureProp
     setIsLoading(true)
     setError(null)
     try {
-      const fp = await FingerprintJS.load()
+      const fp = await load()
       const result = await fp.get()
       onCapture(result.visitorId)
     } catch {

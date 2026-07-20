@@ -26,11 +26,11 @@ export default function Orders() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">Orders</h1>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v === "all" ? "" : v); setPage(1) }}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Statuses" />
             </SelectTrigger>
             <SelectContent>
@@ -40,8 +40,8 @@ export default function Orders() {
               ))}
             </SelectContent>
           </Select>
-          <Link to="/dashboard/orders/new">
-            <Button><Plus className="h-4 w-4 mr-2" /> Create Order</Button>
+          <Link to="/dashboard/orders/new" className="w-full sm:w-auto">
+            <Button className="w-full"><Plus className="h-4 w-4 mr-2" /> Create Order</Button>
           </Link>
         </div>
       </div>
@@ -50,8 +50,8 @@ export default function Orders() {
         <EmptyState icon={Package} title="No orders" description="Create your first escrow order." action={{ label: "Create Order", onClick: () => window.location.href = "/dashboard/orders/new" }} />
       ) : (
         <>
-          <div className="border rounded-lg">
-            <Table>
+          <div className="border rounded-lg overflow-x-auto">
+            <Table className="min-w-[600px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Reference</TableHead>

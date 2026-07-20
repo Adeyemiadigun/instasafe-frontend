@@ -36,13 +36,13 @@ export default function DisputesList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">All Disputes</h1>
         <select
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className="h-10 w-full sm:w-auto rounded-md border border-input bg-background px-3 py-2 text-sm"
         >
           <option value="all">All Statuses</option>
           {Object.entries(DISPUTE_STATUS_LABELS).map(([key, label]) => (
@@ -54,8 +54,8 @@ export default function DisputesList() {
       {filtered.length === 0 ? (
         <EmptyState icon={AlertTriangle} title="No disputes" description="No disputes match your filter." />
       ) : (
-        <div className="rounded-md border">
-          <Table>
+        <div className="rounded-md border overflow-x-auto">
+          <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Order</TableHead>

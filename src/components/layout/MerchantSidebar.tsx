@@ -15,7 +15,7 @@ export default function MerchantSidebar() {
   const { logout } = useAuth()
 
   return (
-    <aside className="w-64 border-r bg-card h-screen flex flex-col">
+    <aside className="w-full border-r bg-card h-screen flex flex-col">
       <div className="p-6 border-b">
         <NavLink to="/dashboard" className="text-xl font-bold text-emerald-600">
           InstaSafe

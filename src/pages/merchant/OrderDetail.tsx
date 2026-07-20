@@ -53,13 +53,15 @@ export default function OrderDetail() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Link to="/dashboard/orders" className="p-2 hover:bg-muted rounded-md"><ArrowLeft className="h-4 w-4" /></Link>
-        <div>
-          <h1 className="text-2xl font-bold">{order.itemName}</h1>
-          <p className="text-muted-foreground">Order {order.orderReference}</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <Link to="/dashboard/orders" className="p-2 hover:bg-muted rounded-md shrink-0"><ArrowLeft className="h-4 w-4" /></Link>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold truncate">{order.itemName}</h1>
+            <p className="text-muted-foreground text-sm truncate">Order {order.orderReference}</p>
+          </div>
         </div>
-        <div className="ml-auto"><OrderStatusBadge status={order.status as OrderStatus} /></div>
+        <div className="sm:ml-auto"><OrderStatusBadge status={order.status as OrderStatus} /></div>
       </div>
 
       <Tabs defaultValue="overview">
@@ -102,7 +104,7 @@ export default function OrderDetail() {
               <CardHeader><CardTitle className="text-base">Generate Escrow Link</CardTitle></CardHeader>
               <CardContent>
                 <form onSubmit={handleGenerateLink} className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid sm:grid-cols-2 gap-3">
                     <div className="space-y-1"><Label>First Name *</Label><Input value={buyerForm.buyerFirstName} onChange={(e) => setBuyerForm((p) => ({ ...p, buyerFirstName: e.target.value }))} required /></div>
                     <div className="space-y-1"><Label>Last Name *</Label><Input value={buyerForm.buyerLastName} onChange={(e) => setBuyerForm((p) => ({ ...p, buyerLastName: e.target.value }))} required /></div>
                   </div>

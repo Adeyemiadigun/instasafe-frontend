@@ -52,38 +52,40 @@ export default function AdminDashboard() {
           {recent.length === 0 ? (
             <EmptyState icon={CheckCircle} title="No disputes" description="No disputes have been raised yet." />
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order</TableHead>
-                  <TableHead>Buyer</TableHead>
-                  <TableHead>Reason</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recent.map((d) => (
-                  <TableRow
-                    key={d.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    tabIndex={0}
-                    onClick={() => navigate(`/admin/disputes/${d.id}`)}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
-                  >
-                    <TableCell className="font-medium">{d.orderReference}</TableCell>
-                    <TableCell>{d.buyerName}</TableCell>
-                    <TableCell className="max-w-[200px] truncate">{d.reason}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={STATUS_COLORS[d.status]}>
-                        {DISPUTE_STATUS_LABELS[d.status]}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{formatDate(d.createdAt)}</TableCell>
+            <div className="overflow-x-auto">
+              <Table className="min-w-[600px]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Order</TableHead>
+                    <TableHead>Buyer</TableHead>
+                    <TableHead>Reason</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Date</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {recent.map((d) => (
+                    <TableRow
+                      key={d.id}
+                      className="cursor-pointer hover:bg-muted/50"
+                      tabIndex={0}
+                      onClick={() => navigate(`/admin/disputes/${d.id}`)}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
+                    >
+                      <TableCell className="font-medium">{d.orderReference}</TableCell>
+                      <TableCell>{d.buyerName}</TableCell>
+                      <TableCell className="max-w-[200px] truncate">{d.reason}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={STATUS_COLORS[d.status]}>
+                          {DISPUTE_STATUS_LABELS[d.status]}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{formatDate(d.createdAt)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>

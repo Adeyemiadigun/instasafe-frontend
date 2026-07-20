@@ -15,6 +15,8 @@ export interface AuthResult {
   firstName: string;
   lastName: string;
   roles: string[];
+  isVerified: boolean;
+  businessName: string;
 }
 
 export interface TimelineEntry {
@@ -33,6 +35,8 @@ export interface RegisterPayload {
   lastName: string;
   email: string;
   password: string;
+  businessName: string;
+  dateOfBirth: string;
   phone?: string;
 }
 

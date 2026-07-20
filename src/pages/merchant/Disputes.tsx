@@ -38,8 +38,8 @@ export default function MerchantDisputes() {
           description="No disputes have been raised on your orders."
         />
       ) : (
-        <div className="rounded-md border">
-          <Table>
+        <div className="rounded-md border overflow-x-auto">
+          <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow>
                 <TableHead>Order Ref</TableHead>
