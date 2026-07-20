@@ -292,15 +292,15 @@ function ProductMockup() {
           </div>
 
           {/* Sliding screens */}
-          <div className="relative h-[340px]">
+          <div className="overflow-hidden h-[340px]">
             <div
-              className="absolute inset-0 transition-transform duration-700 ease-spring"
-              style={{ transform: `translateX(-${active * 100}%)` }}
+              className="flex h-full transition-transform duration-700 ease-spring"
+              style={{ transform: `translateX(-${active * 50}%)`, width: "200%" }}
             >
-              <div className="absolute inset-0 h-[340px]" style={{ left: "0%" }}>
+              <div className="w-1/2 h-full flex-shrink-0">
                 <WhatsAppScreen />
               </div>
-              <div className="absolute inset-0 h-[340px]" style={{ left: "100%" }}>
+              <div className="w-1/2 h-full flex-shrink-0">
                 <WebDashboardScreen />
               </div>
             </div>
