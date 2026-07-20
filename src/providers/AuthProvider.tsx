@@ -7,7 +7,7 @@ interface AuthContextType {
   user: AuthResult | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: { firstName: string; lastName: string; email: string; password: string; phone?: string }) => Promise<string>;
+  register: (data: { firstName: string; lastName: string; email: string; password: string; businessName: string; dateOfBirth: string; phone?: string }) => Promise<string>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -23,6 +23,8 @@ function mapBackendAuth(raw: Record<string, unknown>): AuthResult {
     firstName: String(raw.FirstName || raw.firstName || ""),
     lastName: String(raw.LastName || raw.lastName || ""),
     roles: Array.isArray(raw.Roles || raw.roles) ? (raw.Roles || raw.roles) as string[] : [],
+    isVerified: Boolean(raw.IsVerified || raw.isVerified || false),
+    businessName: String(raw.BusinessName || raw.businessName || ""),
   };
 }
 
@@ -40,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .then((res) => {
           setUser(mapBackendAuth(res.data));
           const mapped = mapBackendAuth(res.data);
-          storeAuth(mapped.token, mapped.refreshToken ?? "", mapped);
+          storeAuth(mapped.token, mapped.refreshToken ?? "", mapped as unknown as Record<string, unknown>);
         })
         .catch((err) => {
           console.error("Auth check failed:", err);
@@ -57,10 +59,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const res = await api.post("/auth/login", { email, password });
     const mapped = mapBackendAuth(res.data);
     setUser(mapped);
-    storeAuth(mapped.token, mapped.refreshToken ?? "", mapped);
+    storeAuth(mapped.token, mapped.refreshToken ?? "", mapped as unknown as Record<string, unknown>);
   }, []);
 
-  const register = useCallback(async (payload: { firstName: string; lastName: string; email: string; password: string; phone?: string }) => {
+  const register = useCallback(async (payload: { firstName: string; lastName: string; email: string; password: string; businessName: string; dateOfBirth: string; phone?: string }) => {
     const res = await api.post("/auth/register", payload);
     const data = res.data;
     return data.Message || data.message || "Registration successful.";

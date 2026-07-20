@@ -21,8 +21,8 @@ export default function SessionTable({ sessions }: SessionTableProps) {
   const navigate = useNavigate()
 
   return (
-    <div className="rounded-md border">
-      <Table>
+    <div className="rounded-md border overflow-x-auto">
+      <Table className="min-w-[600px]">
         <TableHeader>
           <TableRow>
             <TableHead>Phone Number</TableHead>

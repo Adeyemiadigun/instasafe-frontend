@@ -7,7 +7,6 @@ import api from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
 
 const forgotSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),

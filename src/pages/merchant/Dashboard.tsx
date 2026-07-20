@@ -24,13 +24,13 @@ export default function MerchantDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Welcome back, {user?.firstName}</h1>
           <p className="text-muted-foreground">Here's your business overview</p>
         </div>
-        <Link to="/dashboard/orders/new">
-          <Button><Plus className="h-4 w-4 mr-2" /> Create Order</Button>
+        <Link to="/dashboard/orders/new" className="w-full sm:w-auto">
+          <Button className="w-full"><Plus className="h-4 w-4 mr-2" /> Create Order</Button>
         </Link>
       </div>
 
@@ -49,8 +49,8 @@ export default function MerchantDashboard() {
         {orders.length === 0 ? (
           <p className="text-muted-foreground text-center py-8">No orders yet. Create your first order to get started.</p>
         ) : (
-          <div className="border rounded-lg">
-            <Table>
+          <div className="border rounded-lg overflow-x-auto">
+            <Table className="min-w-[600px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Reference</TableHead>

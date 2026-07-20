@@ -2,7 +2,9 @@ import { useAuth } from "@/providers/AuthProvider"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-export default function Header() {
+import { Menu } from "lucide-react"
+
+export default function Header({ onMenuClick }: { onMenuClick?: () => void }) {
   const { user, logout } = useAuth()
 
   const initials = user
@@ -10,8 +12,16 @@ export default function Header() {
     : "?"
 
   return (
-    <header className="h-16 border-b bg-background flex items-center justify-between px-6">
-      <div />
+    <header className="h-16 flex-shrink-0 border-b bg-background flex items-center justify-between px-4 md:px-6">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuClick}
+          className="md:hidden p-2 -ml-2 text-muted-foreground hover:bg-muted rounded-md"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        {/* Placeholder for page title or breadcrumbs if needed later */}
+      </div>
       <DropdownMenu>
         <DropdownMenuTrigger className="focus:outline-none">
           <Avatar className="h-8 w-8">
