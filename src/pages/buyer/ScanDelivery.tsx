@@ -12,28 +12,37 @@ import { Camera } from "lucide-react"
 
 export default function ScanDelivery() {
   const { orderId } = useParams<{ orderId: string }>()
-  const confirmDelivery = useConfirmDelivery(orderId || "")
   const [step, setStep] = useState<"start" | "scan" | "fingerprint" | "confirming" | "done">("start")
   const [qrToken, setQrToken] = useState("")
+  const [sessionId, setSessionId] = useState("")
   const [result, setResult] = useState<{ status: "success" | "error"; message: string } | null>(null)
+  const confirmDelivery = useConfirmDelivery(orderId || "")
 
   const handleQrScan = useCallback((decodedText: string) => {
-    let token = decodedText
+    let token = ""
+    let sid = ""
     try {
       const parsed = JSON.parse(decodedText)
-      token = parsed.buyerQrToken || parsed.token || parsed
+      token = parsed.buyerQrToken || parsed.token || decodedText
+      sid = parsed.sessionId || ""
     } catch {
-      // raw token string, use as-is
+      token = decodedText
     }
     setQrToken(token)
-    setStep("fingerprint")
+    if (sid) {
+      setSessionId(sid)
+      setStep("fingerprint")
+    } else {
+      setResult({ status: "error", message: "QR code missing session ID. Please ask the merchant to regenerate the QR code." })
+      setStep("done")
+    }
   }, [])
 
   const handleFingerprint = useCallback(async (fp: string) => {
     setStep("confirming")
     try {
       const res = await confirmDelivery.mutateAsync({
-        sessionId: orderId || "",
+        sessionId,
         buyerQrToken: qrToken,
         deviceFingerprint: fp,
       })
@@ -47,7 +56,7 @@ export default function ScanDelivery() {
     } finally {
       setStep("done")
     }
-  }, [qrToken, confirmDelivery, orderId])
+  }, [qrToken, sessionId, confirmDelivery])
 
   return (
     <div className="max-w-md mx-auto space-y-6">
