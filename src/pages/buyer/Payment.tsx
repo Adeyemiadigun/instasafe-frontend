@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, AlertCircle, ShieldCheck } from "lucide-react"
+import { CheckCircle, AlertCircle } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 const paymentSchema = z.object({
   buyerFirstName: z.string().min(1, "First name is required"),
@@ -45,9 +46,8 @@ export default function Payment() {
   return (
     <div className="min-h-screen bg-muted/30">
       <div className="max-w-md mx-auto py-12 px-4">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <ShieldCheck className="h-7 w-7 text-primary" />
-          <span className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight">InstaSafe</span>
+        <div className="flex items-center justify-center mb-8">
+          <Logo />
         </div>
 
         {result ? (

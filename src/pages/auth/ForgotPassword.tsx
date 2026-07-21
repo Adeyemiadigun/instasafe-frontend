@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Mail } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 const forgotSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -40,7 +41,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <div className="w-full max-w-[400px]">
         <div className="mb-10">
-          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
+          <Logo />
         </div>
 
         <div className="space-y-1.5 mb-8">

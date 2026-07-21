@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom"
 import api from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { ShieldCheck, AlertCircle, Loader2 } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams()
@@ -34,7 +35,7 @@ export default function VerifyEmail() {
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <div className="w-full max-w-[400px] text-center">
         <div className="mb-8">
-          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8 mx-auto" />
+          <Logo className="h-8 mx-auto" />
         </div>
 
         <div className="bg-card rounded-xl border border-border/60 p-8 shadow-xs">

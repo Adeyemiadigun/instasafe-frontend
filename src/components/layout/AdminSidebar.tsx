@@ -3,6 +3,7 @@ import { LayoutDashboard, AlertTriangle, MessageSquare, LogOut } from "lucide-re
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/providers/AuthProvider"
 import { Button } from "@/components/ui/button"
+import Logo from "@/components/shared/Logo"
 
 const adminLinks = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
@@ -17,7 +18,7 @@ export default function AdminSidebar() {
     <aside className="w-full h-screen flex flex-col bg-card">
       <div className="p-4 pb-2">
         <NavLink to="/admin" className="flex items-center no-underline">
-          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
+          <Logo />
         </NavLink>
         <p className="text-xs text-muted-foreground mt-1.5 ml-0.5 font-medium uppercase tracking-wider">Admin</p>
       </div>
@@ -53,7 +54,7 @@ export default function AdminSidebar() {
         ))}
       </nav>
 
-      <div className="p-3 border-t border-border/40">
+      <div className="p-3 border-t border-border/50">
         <Button
           variant="ghost"
           className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/5"

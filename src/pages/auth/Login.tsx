@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { ArrowRight, Lock, Mail, Eye, EyeOff } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -47,7 +48,7 @@ export default function Login() {
       <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-foreground items-center justify-center p-12">
         <div className="relative z-10 max-w-md text-white">
           <div className="mb-10">
-            <img src="/logo-wordmark-white.svg" alt="InstaSafe" className="h-13" />
+            <Logo variant="wordmark-white" className="h-13" />
           </div>
           <h2 className="text-3xl font-bold font-[family-name:var(--font-display)] mb-4 leading-tight tracking-tight">
             Secure escrow payments for Nigerian e-commerce
@@ -76,7 +77,7 @@ export default function Login() {
         <div className="w-full max-w-[400px]">
           {/* Mobile logo */}
           <div className="mb-10 lg:hidden">
-            <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
+            <Logo />
           </div>
 
           <div className="space-y-1.5 mb-8">

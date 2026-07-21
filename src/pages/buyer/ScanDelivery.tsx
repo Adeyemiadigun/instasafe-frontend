@@ -8,7 +8,8 @@ import FingerprintCapture from "@/components/delivery/FingerprintCapture"
 import DeliveryStatus from "@/components/delivery/DeliveryStatus"
 import { getApiErrorMessage } from "@/lib/errorHandler"
 import { toast } from "sonner"
-import { Camera, ShieldCheck } from "lucide-react"
+import { Camera } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 export default function ScanDelivery() {
   const { orderId } = useParams<{ orderId: string }>()
@@ -61,9 +62,8 @@ export default function ScanDelivery() {
   return (
     <div className="min-h-screen bg-muted/30">
       <div className="max-w-md mx-auto py-12 px-4">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <ShieldCheck className="h-7 w-7 text-primary" />
-          <span className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight">InstaSafe</span>
+        <div className="flex items-center justify-center mb-8">
+          <Logo />
         </div>
 
         <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] text-center mb-6 tracking-tight">Confirm Delivery</h1>

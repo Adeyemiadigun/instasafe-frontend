@@ -3,6 +3,7 @@ import { LayoutDashboard, Package, AlertTriangle, Settings, LogOut } from "lucid
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/providers/AuthProvider"
 import { Button } from "@/components/ui/button"
+import Logo from "@/components/shared/Logo"
 
 const merchantLinks = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard", end: true },
@@ -18,7 +19,7 @@ export default function MerchantSidebar() {
     <aside className="w-full h-screen flex flex-col bg-card">
       <div className="p-4 pb-2">
         <NavLink to="/dashboard" className="flex items-center no-underline">
-          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
+          <Logo />
         </NavLink>
       </div>
 
@@ -53,7 +54,7 @@ export default function MerchantSidebar() {
         ))}
       </nav>
 
-      <div className="p-3 border-t border-border/40">
+      <div className="p-3 border-t border-border/50">
         <Button
           variant="ghost"
           className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/5"

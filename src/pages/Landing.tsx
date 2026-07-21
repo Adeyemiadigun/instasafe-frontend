@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, type ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Menu, X, ChevronRight } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null)
@@ -426,10 +427,10 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen">
-      {/* ── Header — text-only logo ── */}
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-50 border-b border-border/50 bg-background">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-14" />
+          <Logo className="h-13"/>
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
             <a href="#how-it-works" className="hover:text-foreground transition-colors duration-300">How It Works</a>
             <a href="#features" className="hover:text-foreground transition-colors duration-300">Features</a>
@@ -661,7 +662,7 @@ export default function Landing() {
         <div className="container mx-auto px-6 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
+              <Logo className="h-13" />
               <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Secure escrow payments for Nigerian e-commerce. Every transaction, verified.</p>
             </div>
             <div>

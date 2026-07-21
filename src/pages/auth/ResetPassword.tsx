@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { useState } from "react"
 import { ArrowLeft, Lock } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 
 const resetSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -48,7 +49,7 @@ export default function ResetPassword() {
       <div className="min-h-screen flex items-center justify-center bg-background p-6">
         <div className="w-full max-w-[400px] text-center">
           <div className="mb-8">
-            <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8 mx-auto" />
+            <Logo className="h-8 mx-auto" />
           </div>
           <div className="bg-card rounded-xl border border-border/60 p-8 shadow-xs">
             <Lock className="h-5 w-5 text-destructive mx-auto mb-4" />
@@ -66,7 +67,7 @@ export default function ResetPassword() {
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <div className="w-full max-w-[400px]">
         <div className="mb-10">
-          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8 mx-auto" />
+          <Logo className="h-8 mx-auto" />
         </div>
 
         <div className="text-center space-y-1.5 mb-8">

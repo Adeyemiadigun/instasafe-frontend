@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Link } from "react-router-dom"
 import { ShieldCheck } from "lucide-react"
+import Logo from "@/components/shared/Logo"
 import type { OrderStatus } from "@/types"
 
 export default function Checkout() {
@@ -19,9 +20,8 @@ export default function Checkout() {
   return (
     <div className="min-h-screen bg-muted/30">
       <div className="max-w-lg mx-auto py-12 px-4">
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <ShieldCheck className="h-7 w-7 text-primary" />
-          <span className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight">InstaSafe</span>
+        <div className="flex items-center justify-center mb-8">
+          <Logo />
         </div>
 
         <Card>
