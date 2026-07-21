@@ -45,7 +45,7 @@ export default function MerchantDashboard() {
           <h3 className="text-base font-semibold font-[family-name:var(--font-display)] text-foreground">Create Orders via WhatsApp!</h3>
           <p className="text-sm text-muted-foreground mt-1">Our AI Bot is the fastest way to create orders. Simply message <strong className="text-foreground">"Create Order"</strong> to our verified Bot to generate escrow links instantly.</p>
         </div>
-        <a href="https://wa.me/2348012345678?text=Create%20Order" target="_blank" rel="noopener noreferrer">
+        <a href={`https://wa.me/${import.meta.env.VITE_WHATSAPP_BOT_NUMBER || "2340000000000"}?text=Create%20Order`} target="_blank" rel="noopener noreferrer">
           <Button className="bg-[#128C7E] hover:bg-[#128C7E]/90 text-white whitespace-nowrap">
             Message Bot
           </Button>
