@@ -1,59 +1,108 @@
 @import "tailwindcss";
 
 @theme {
+  /* ── Color System ── */
   --color-background: #fafaf9;
-  --color-foreground: #1c1917;
+  --color-foreground: #18181b;
   --color-card: #ffffff;
-  --color-card-foreground: #1c1917;
+  --color-card-foreground: #18181b;
   --color-popover: #ffffff;
-  --color-popover-foreground: #1c1917;
+  --color-popover-foreground: #18181b;
   --color-primary: #0f766e;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #f5f5f4;
-  --color-secondary-foreground: #44403c;
-  --color-muted: #f5f5f4;
-  --color-muted-foreground: #78716c;
-  --color-accent: #fffbeb;
-  --color-accent-foreground: #92400e;
-  --color-destructive: #dc2626;
-  --color-destructive-foreground: #ffffff;
-  --color-border: #e7e5e4;
-  --color-input: #d6d3d1;
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #27272a;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-accent: #f0fdf4;
+  --color-accent-foreground: #166534;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
   --color-ring: #0f766e;
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
+  /* ── Typography ── */
   --font-display: "Outfit", system-ui, sans-serif;
   --font-body: "Plus Jakarta Sans", "DM Sans", system-ui, sans-serif;
   --font-editorial: "Instrument Serif", Georgia, serif;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Base Layer ── */
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "ss02", "cv01";
+    letter-spacing: -0.01em;
   }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-  }
-}
-
-@layer utilities {
-  .text-balance {
+    font-feature-settings: "ss01";
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
-  .ease-spring {
-    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+
+  p, li, dd, dt {
+    text-wrap: pretty;
   }
-  .ease-out-expo {
-    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+
+  ::selection {
+    background-color: oklch(0.9 0.05 170);
+    color: oklch(0.2 0.05 170);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.85 0 0);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.75 0 0);
   }
 }
 
+/* ── Component Layer ── */
+@layer components {
+  .btn-press {
+    transition-property: transform;
+    transition-duration: 100ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-press:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ── Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

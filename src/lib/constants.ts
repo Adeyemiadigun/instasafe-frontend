@@ -1,5 +1,13 @@
 import type { OrderStatus, DisputeStatus, ChatbotState } from "@/types";
 
+export const DISPUTE_STATUS_COLORS: Record<DisputeStatus, string> = {
+  Open: "bg-muted text-muted-foreground",
+  UnderReview: "bg-muted text-muted-foreground",
+  ResolvedRefund: "bg-muted text-muted-foreground",
+  ResolvedRelease: "bg-muted text-muted-foreground",
+  Closed: "bg-muted text-muted-foreground",
+};
+
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   Draft: "Draft",
   PendingPayment: "Pending Payment",
@@ -13,15 +21,15 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
 };
 
 export const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
-  Draft: "bg-stone-100 text-stone-600",
-  PendingPayment: "bg-amber-50 text-amber-700 border-amber-200",
-  FundedInEscrow: "bg-sky-50 text-sky-700 border-sky-200",
-  Dispatched: "bg-violet-50 text-violet-700 border-violet-200",
-  Delivered: "bg-indigo-50 text-indigo-700 border-indigo-200",
-  Disputed: "bg-red-50 text-red-700 border-red-200",
-  CompletedReleased: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  Refunded: "bg-orange-50 text-orange-700 border-orange-200",
-  Expired: "bg-stone-100 text-stone-500",
+  Draft: "bg-muted text-muted-foreground",
+  PendingPayment: "bg-muted text-muted-foreground",
+  FundedInEscrow: "bg-muted text-muted-foreground",
+  Dispatched: "bg-muted text-muted-foreground",
+  Delivered: "bg-muted text-muted-foreground",
+  Disputed: "bg-muted text-muted-foreground",
+  CompletedReleased: "bg-muted text-muted-foreground",
+  Refunded: "bg-muted text-muted-foreground",
+  Expired: "bg-muted text-muted-foreground",
 };
 
 export const DISPUTE_STATUS_LABELS: Record<DisputeStatus, string> = {

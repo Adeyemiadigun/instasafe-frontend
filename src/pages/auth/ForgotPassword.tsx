@@ -7,7 +7,7 @@ import api from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Shield, ArrowLeft, Mail, CheckCircle } from "lucide-react"
+import { ArrowLeft, Mail } from "lucide-react"
 
 const forgotSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email format"),
@@ -38,25 +38,23 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
-      <div className="w-full max-w-md">
-        <div className="flex items-center gap-2.5 mb-8">
-          <div className="p-2 rounded-lg bg-primary">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-xl font-bold font-[family-name:var(--font-display)]">InstaSafe</span>
+      <div className="w-full max-w-[400px]">
+        <div className="mb-10">
+          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
         </div>
 
-        <div className="space-y-2 mb-8">
-          <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Forgot Password</h1>
-          <p className="text-muted-foreground">Enter your email and we'll send you a reset link.</p>
+        <div className="space-y-1.5 mb-8">
+          <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] tracking-tight">Forgot Password</h1>
+          <p className="text-sm text-muted-foreground">Enter your email and we'll send you a reset link.</p>
         </div>
 
         {sent ? (
           <div className="text-center py-8 bg-card rounded-xl border border-border/60 px-6">
-            <div className="p-3 rounded-full bg-emerald-50 w-fit mx-auto mb-4">
-              <CheckCircle className="h-6 w-6 text-emerald-600" />
-            </div>
-            <p className="text-emerald-700 font-medium mb-4">If an account exists with that email, you'll receive a reset link.</p>
+            <svg className="h-6 w-6 text-emerald-600 mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <path d="M22 4L12 14.01l-3-3" />
+            </svg>
+            <p className="text-emerald-700 font-medium mb-4 text-sm">If an account exists with that email, you'll receive a reset link.</p>
             <Link to="/auth/login">
               <Button variant="outline" className="h-10">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -65,14 +63,14 @@ export default function ForgotPassword() {
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-1.5">
               <Label htmlFor="email" className="text-sm font-medium">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
-                <Input id="email" type="email" {...register("email")} className="pl-10 h-11" placeholder="you@example.com" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
+                <Input id="email" type="email" {...register("email")} className="pl-10" placeholder="you@example.com" />
               </div>
-              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
             <Button type="submit" className="w-full h-11 font-semibold" disabled={loading}>
               {loading ? "Sending..." : "Send Reset Link"}

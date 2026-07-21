@@ -9,14 +9,14 @@ export default function AiSuggestion({ suggestion }: AiSuggestionProps) {
   if (!suggestion) return null
 
   return (
-    <Card className="border-emerald-200 bg-emerald-50/50">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-base flex items-center gap-2 text-emerald-700">
+        <CardTitle className="text-base flex items-center gap-2 text-foreground">
           <Sparkles className="h-4 w-4" /> AI Suggestion
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-emerald-800">{suggestion}</p>
+        <p className="text-sm text-foreground">{suggestion}</p>
       </CardContent>
     </Card>
   )

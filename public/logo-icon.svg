@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="20" y1="8" x2="100" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f766e"/>
+      <stop offset="100%" stop-color="#115e59"/>
+    </linearGradient>
+    <linearGradient id="checkGrad" x1="42" y1="55" x2="78" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ccfbf1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shield -->
+  <path
+    d="M60 10 L102 30 C102 30 105 63 96 81 C87 99 72 106 60 110 C48 106 33 99 24 81 C15 63 18 30 18 30 Z"
+    fill="url(#shieldGrad)"
+    stroke="#0d6b63"
+    stroke-width="2"
+  />
+
+  <!-- Inner glow -->
+  <path
+    d="M60 18 L96 35 C96 35 98.5 63 91 78 C83.5 93 70 100 60 103 C50 100 36.5 93 29 78 C21.5 63 24 35 24 35 Z"
+    fill="none"
+    stroke="#14b8a6"
+    stroke-width="1"
+    opacity="0.3"
+  />
+
+  <!-- Checkmark -->
+  <path
+    d="M42 60 L54 72 L78 48"
+    stroke="url(#checkGrad)"
+    stroke-width="7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>

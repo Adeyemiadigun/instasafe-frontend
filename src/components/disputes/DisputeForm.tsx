@@ -3,8 +3,9 @@ import { useAuth } from "@/providers/AuthProvider"
 import { useRaiseDispute } from "@/hooks/useDisputes"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
-import { AlertTriangle } from "lucide-react"
 
 interface DisputeFormProps {
   orderId: string
@@ -47,33 +48,28 @@ export default function DisputeForm({ orderId, onSuccess }: DisputeFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex items-center gap-2 text-destructive">
-        <AlertTriangle className="h-5 w-5" />
-        <h3 className="font-semibold">Raise a Dispute</h3>
-      </div>
+      <h3 className="font-semibold font-[family-name:var(--font-display)] tracking-tight">Raise a Dispute</h3>
       <p className="text-sm text-muted-foreground">
         Only raise a dispute if there is an issue with the order. You have 24 hours after delivery to raise a dispute.
       </p>
-      <div className="space-y-2">
-        <Label htmlFor="reason">Reason *</Label>
-        <textarea
+      <div className="space-y-1.5">
+        <Label htmlFor="reason" className="text-sm font-medium">Reason *</Label>
+        <Textarea
           id="reason"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           rows={3}
-          className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="min-h-[80px]"
           placeholder="Describe the issue with this order..."
           required
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="evidence">Evidence URLs (optional)</Label>
-        <input
+      <div className="space-y-1.5">
+        <Label htmlFor="evidence" className="text-sm font-medium">Evidence URLs <span className="text-muted-foreground font-normal">(optional)</span></Label>
+        <Input
           id="evidence"
-          type="text"
           value={evidenceUrls}
           onChange={(e) => setEvidenceUrls(e.target.value)}
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           placeholder="Comma-separated links to evidence"
         />
       </div>

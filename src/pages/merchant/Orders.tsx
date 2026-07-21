@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "@/providers/AuthProvider"
 import { useMerchantOrders } from "@/hooks/useOrders"
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge"
@@ -15,6 +15,7 @@ import type { OrderStatus } from "@/types"
 
 export default function Orders() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState<string>("")
   const { data, isLoading } = useMerchantOrders(user?.userId || "", page, 10, statusFilter || undefined)
@@ -27,7 +28,7 @@ export default function Orders() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Orders</h1>
+        <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] tracking-tight">Orders</h1>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v === "all" ? "" : v); setPage(1) }}>
             <SelectTrigger className="w-full sm:w-48 h-10">
@@ -53,43 +54,45 @@ export default function Orders() {
           icon={Package}
           title="No orders"
           description="Create your first escrow order to start selling."
-          action={{ label: "Create Order", onClick: () => window.location.href = "/dashboard/orders/new" }}
+          action={{ label: "Create Order", onClick: () => navigate("/dashboard/orders/new") }}
         />
       ) : (
         <>
-          <div className="bg-card rounded-xl border border-border/60 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="font-semibold">Reference</TableHead>
-                  <TableHead className="font-semibold">Item</TableHead>
-                  <TableHead className="font-semibold">Price</TableHead>
-                  <TableHead className="font-semibold">Buyer</TableHead>
-                  <TableHead className="font-semibold">Status</TableHead>
-                  <TableHead className="font-semibold">Created</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.map((order, i) => (
-                  <TableRow key={order.id} className={i % 2 === 0 ? "bg-muted/20" : ""}>
-                    <TableCell className="font-medium">
-                      <Link to={`/dashboard/orders/${order.id}`} className="text-primary hover:text-primary/80 font-semibold transition-colors">
-                        {order.orderReference}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{order.itemName}</TableCell>
-                    <TableCell className="font-semibold">{formatCurrency(order.price)}</TableCell>
-                    <TableCell className="text-muted-foreground">{order.buyerName || "—"}</TableCell>
-                    <TableCell><OrderStatusBadge status={order.status as OrderStatus} /></TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{formatDateShort(order.createdAt)}</TableCell>
+          <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead>Reference</TableHead>
+                    <TableHead>Item</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Buyer</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Created</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {orders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell className="font-medium">
+                        <Link to={`/dashboard/orders/${order.id}`} className="text-primary hover:text-primary/80 font-semibold transition-colors">
+                          {order.orderReference}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">{order.itemName}</TableCell>
+                      <TableCell className="font-medium tabular-nums">{formatCurrency(order.price)}</TableCell>
+                      <TableCell className="text-muted-foreground">{order.buyerName || "\u2014"}</TableCell>
+                      <TableCell><OrderStatusBadge status={order.status as OrderStatus} /></TableCell>
+                      <TableCell className="text-muted-foreground text-sm tabular-nums">{formatDateShort(order.createdAt)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Page <span className="font-semibold text-foreground">{page}</span> of {totalPages}
+              Page <span className="font-medium text-foreground">{page}</span> of {totalPages}
             </p>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>

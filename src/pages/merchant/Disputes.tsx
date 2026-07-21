@@ -30,7 +30,7 @@ export default function MerchantDisputes() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Disputes</h1>
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] tracking-tight">Disputes</h1>
       {disputedOrders.length === 0 ? (
         <EmptyState
           icon={AlertTriangle}
@@ -38,15 +38,15 @@ export default function MerchantDisputes() {
           description="No disputes have been raised on your orders."
         />
       ) : (
-        <div className="bg-card rounded-xl border border-border/60 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="font-semibold">Order Ref</TableHead>
-                <TableHead className="font-semibold">Item</TableHead>
-                <TableHead className="font-semibold">Price</TableHead>
-                <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold">Date</TableHead>
+                <TableHead>Order Ref</TableHead>
+                <TableHead>Item</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,15 +58,13 @@ export default function MerchantDisputes() {
                   onClick={() => navigate(`/dashboard/orders/${order.id}`)}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/dashboard/orders/${order.id}`) } }}
                 >
-                  <TableCell className="font-medium">{order.orderReference}</TableCell>
+                  <TableCell className="font-semibold text-primary">{order.orderReference}</TableCell>
                   <TableCell>{order.itemName}</TableCell>
                   <TableCell>₦{order.price.toLocaleString()}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="bg-red-100 text-red-700">
-                      {DISPUTE_STATUS_LABELS["Open"]}
-                    </Badge>
+                    <Badge variant="outline">{DISPUTE_STATUS_LABELS["Open"]}</Badge>
                   </TableCell>
-                  <TableCell>{formatDate(order.createdAt)}</TableCell>
+                  <TableCell className="text-muted-foreground text-sm">{formatDate(order.createdAt)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

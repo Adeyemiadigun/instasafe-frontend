@@ -9,6 +9,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { getApiErrorMessage } from "@/lib/errorHandler"
 import { toast } from "sonner"
 import { ArrowLeft } from "lucide-react"
@@ -65,12 +66,11 @@ export default function DisputeDetail() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="adminNotes">Admin Notes (optional)</Label>
-              <textarea
+              <Textarea
                 id="adminNotes"
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
                 rows={3}
-                className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 placeholder="Add notes about your decision..."
               />
             </div>
@@ -83,7 +83,7 @@ export default function DisputeDetail() {
                 {resolveDispute.isPending ? "Processing..." : "Refund Buyer"}
               </Button>
               <Button
-                className="bg-emerald-600 hover:bg-emerald-700"
+                className="bg-primary hover:bg-primary/90"
                 onClick={() => handleResolve("release")}
                 disabled={resolveDispute.isPending}
               >
@@ -98,7 +98,7 @@ export default function DisputeDetail() {
             <Button
               onClick={handlePayout}
               disabled={executePayout.isPending}
-              className="bg-emerald-600 hover:bg-emerald-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {executePayout.isPending ? "Executing..." : "Execute Split Payout"}
             </Button>

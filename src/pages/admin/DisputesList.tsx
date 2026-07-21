@@ -3,21 +3,14 @@ import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import api from "@/lib/api"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LoadingSpinner from "@/components/shared/LoadingSpinner"
 import EmptyState from "@/components/shared/EmptyState"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 import type { Dispute } from "@/types/dispute"
-import { DISPUTE_STATUS_LABELS } from "@/lib/constants"
-
-const STATUS_COLORS: Record<string, string> = {
-  Open: "bg-red-100 text-red-700",
-  UnderReview: "bg-yellow-100 text-yellow-700",
-  ResolvedRefund: "bg-orange-100 text-orange-700",
-  ResolvedRelease: "bg-green-100 text-green-700",
-  Closed: "bg-gray-100 text-gray-700",
-}
+import { DISPUTE_STATUS_LABELS, DISPUTE_STATUS_COLORS } from "@/lib/constants"
 
 export default function DisputesList() {
   const navigate = useNavigate()
@@ -37,39 +30,40 @@ export default function DisputesList() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">All Disputes</h1>
-        <select
-          id="status-filter"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 w-full sm:w-auto rounded-lg border border-input bg-card px-3 py-2 text-sm font-medium"
-        >
-          <option value="all">All Statuses</option>
-          {Object.entries(DISPUTE_STATUS_LABELS).map(([key, label]) => (
-            <option key={key} value={key}>{label}</option>
-          ))}
-        </select>
+        <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] tracking-tight">All Disputes</h1>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="h-10 w-full sm:w-48 rounded-lg">
+            <SelectValue placeholder="All Statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            {Object.entries(DISPUTE_STATUS_LABELS).map(([key, label]) => (
+              <SelectItem key={key} value={key}>{label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {filtered.length === 0 ? (
         <EmptyState icon={AlertTriangle} title="No disputes" description="No disputes match your filter." />
       ) : (
-        <div className="bg-card rounded-xl border border-border/60 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+          <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
-                <TableHead className="font-semibold">Order</TableHead>
-                <TableHead className="font-semibold">Buyer</TableHead>
-                <TableHead className="font-semibold">Reason</TableHead>
-                <TableHead className="font-semibold">Status</TableHead>
-                <TableHead className="font-semibold">Date</TableHead>
+                <TableHead>Order</TableHead>
+                <TableHead>Buyer</TableHead>
+                <TableHead>Reason</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((d, i) => (
+              {filtered.map((d) => (
                 <TableRow
                   key={d.id}
-                  className={`cursor-pointer hover:bg-muted/50 ${i % 2 === 0 ? "bg-muted/20" : ""}`}
+                  className="cursor-pointer hover:bg-muted/50"
                   tabIndex={0}
                   onClick={() => navigate(`/admin/disputes/${d.id}`)}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); navigate(`/admin/disputes/${d.id}`) } }}
@@ -78,7 +72,7 @@ export default function DisputesList() {
                   <TableCell>{d.buyerName}</TableCell>
                   <TableCell className="max-w-[200px] truncate text-muted-foreground">{d.reason}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={STATUS_COLORS[d.status]}>
+                    <Badge variant="outline" className={DISPUTE_STATUS_COLORS[d.status]}>
                       {DISPUTE_STATUS_LABELS[d.status]}
                     </Badge>
                   </TableCell>
@@ -87,6 +81,7 @@ export default function DisputesList() {
               ))}
             </TableBody>
           </Table>
+          </div>
         </div>
       )}
     </div>

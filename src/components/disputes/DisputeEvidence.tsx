@@ -30,7 +30,7 @@ export default function DisputeEvidence({ evidenceUrls }: DisputeEvidenceProps) 
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-md border overflow-hidden hover:ring-2 hover:ring-emerald-500 transition-all"
+              className="block rounded-lg border overflow-hidden"
             >
               <img
                 src={url}

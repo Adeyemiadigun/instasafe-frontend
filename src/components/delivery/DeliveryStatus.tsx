@@ -9,16 +9,18 @@ export default function DeliveryStatus({ status, message }: DeliveryStatusProps)
   const isSuccess = status === "success"
 
   return (
-    <div className="flex flex-col items-center gap-3 py-4">
+    <div className="flex flex-col items-center gap-4 py-6">
       {isSuccess ? (
-        <CheckCircle className="h-16 w-16 text-emerald-500" />
+        <CheckCircle className="h-8 w-8 text-primary" />
       ) : (
-        <XCircle className="h-16 w-16 text-destructive" />
+        <XCircle className="h-8 w-8 text-destructive" />
       )}
-      <h3 className="text-lg font-semibold">
-        {isSuccess ? "Delivery Confirmed" : "Delivery Failed"}
-      </h3>
-      <p className="text-sm text-muted-foreground text-center max-w-sm">{message}</p>
+      <div className="text-center space-y-1">
+        <h3 className="text-lg font-semibold font-[family-name:var(--font-display)] tracking-tight">
+          {isSuccess ? "Delivery Confirmed" : "Delivery Failed"}
+        </h3>
+        <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">{message}</p>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom"
-import { LayoutDashboard, Package, AlertTriangle, Settings, LogOut, Shield } from "lucide-react"
+import { LayoutDashboard, Package, AlertTriangle, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/providers/AuthProvider"
 import { Button } from "@/components/ui/button"
@@ -15,16 +15,14 @@ export default function MerchantSidebar() {
   const { logout } = useAuth()
 
   return (
-    <aside className="w-full h-screen flex flex-col bg-card border-r border-border/60">
-      <div className="p-5 mx-3 mt-3 rounded-xl bg-gradient-to-br from-primary to-teal-600">
-        <NavLink to="/dashboard" className="flex items-center gap-2.5 text-white no-underline">
-          <div className="p-1.5 rounded-lg bg-white/15">
-            <Shield className="h-5 w-5" />
-          </div>
-          <span className="text-lg font-bold tracking-tight font-[family-name:var(--font-display)]">InstaSafe</span>
+    <aside className="w-full h-screen flex flex-col bg-card">
+      <div className="p-4 pb-2">
+        <NavLink to="/dashboard" className="flex items-center no-underline">
+          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
         </NavLink>
       </div>
-      <nav className="flex-1 p-3 space-y-0.5 mt-2">
+
+      <nav className="flex-1 px-3 py-4 space-y-0.5">
         {merchantLinks.map((link) => (
           <NavLink
             key={link.to}
@@ -32,7 +30,7 @@ export default function MerchantSidebar() {
             end={link.end}
             className={({ isActive }) =>
               cn(
-                "group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                "group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150",
                 isActive
                   ? "bg-primary/8 text-primary"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -42,16 +40,20 @@ export default function MerchantSidebar() {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-[3px] rounded-full bg-primary" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-full bg-primary" />
                 )}
-                <link.icon className={cn("h-[18px] w-[18px] shrink-0", isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground")} />
+                <link.icon className={cn(
+                  "h-[18px] w-[18px] shrink-0",
+                  isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                )} />
                 {link.label}
               </>
             )}
           </NavLink>
         ))}
       </nav>
-      <div className="p-3 border-t border-border/60">
+
+      <div className="p-3 border-t border-border/40">
         <Button
           variant="ghost"
           className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/5"

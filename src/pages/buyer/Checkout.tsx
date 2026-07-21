@@ -6,6 +6,7 @@ import CurrencyDisplay from "@/components/shared/CurrencyDisplay"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Link } from "react-router-dom"
+import { ShieldCheck } from "lucide-react"
 import type { OrderStatus } from "@/types"
 
 export default function Checkout() {
@@ -16,38 +17,56 @@ export default function Checkout() {
   if (!order) return <p className="text-center py-8 text-muted-foreground">Order not found.</p>
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">Order Checkout</h1>
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>{order.itemName}</CardTitle>
-            <OrderStatusBadge status={order.status as OrderStatus} />
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {order.itemImageUrl && <img src={order.itemImageUrl} alt={order.itemName} className="w-full h-48 object-cover rounded-xl" />}
-          {order.itemDescription && <p className="text-muted-foreground leading-relaxed">{order.itemDescription}</p>}
-          <div className="flex justify-between text-lg font-semibold pt-3 border-t border-border/60">
-            <span>Price</span>
-            <CurrencyDisplay amount={order.price} />
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Seller</span>
-            <span className="font-medium">{order.merchant.businessName}</span>
-          </div>
-          {order.status === "PendingPayment" && (
-            <Link to={`/order/${orderId}/pay`}>
-              <Button className="w-full h-11" size="lg">Pay Now</Button>
-            </Link>
-          )}
-          {order.status !== "PendingPayment" && order.status !== "Draft" && (
-            <Link to={`/order/${orderId}/track`}>
-              <Button variant="outline" className="w-full h-11">Track Order</Button>
-            </Link>
-          )}
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-muted/30">
+      <div className="max-w-lg mx-auto py-12 px-4">
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <ShieldCheck className="h-7 w-7 text-primary" />
+          <span className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight">InstaSafe</span>
+        </div>
+
+        <Card>
+          <CardHeader className="pb-4">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">{order.itemName}</CardTitle>
+              <OrderStatusBadge status={order.status as OrderStatus} />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            {order.itemImageUrl && <img src={order.itemImageUrl} alt={order.itemName} className="w-full h-56 object-cover rounded-xl" />}
+            {order.itemDescription && <p className="text-sm text-muted-foreground leading-relaxed">{order.itemDescription}</p>}
+
+            <div className="bg-muted rounded-xl p-4 text-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Amount to Pay</p>
+              <p className="text-3xl font-[family-name:var(--font-display)] font-bold text-primary tracking-tight">
+                <CurrencyDisplay amount={order.price} />
+              </p>
+            </div>
+
+            <div className="flex justify-between text-sm py-2 border-t border-border/40">
+              <span className="text-muted-foreground">Seller</span>
+              <span className="font-medium">{order.merchant.businessName}</span>
+            </div>
+
+            {order.status === "PendingPayment" && (
+              <Link to={`/order/${orderId}/pay`} className="block">
+                <Button className="w-full h-12 text-base font-semibold" size="lg">
+                  Proceed to Payment
+                </Button>
+              </Link>
+            )}
+            {order.status !== "PendingPayment" && order.status !== "Draft" && (
+              <Link to={`/order/${orderId}/track`} className="block">
+                <Button variant="outline" className="w-full h-12 text-base">Track Order</Button>
+              </Link>
+            )}
+
+            <p className="text-center text-xs text-muted-foreground pt-2">
+              <ShieldCheck className="inline h-3 w-3 mr-1 -mt-0.5" />
+              Payment is held in escrow until delivery is confirmed
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

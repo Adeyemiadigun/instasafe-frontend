@@ -16,7 +16,7 @@ export default function ChatbotSessions() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">WhatsApp Sessions</h1>
+      <h1 className="text-2xl font-bold font-[family-name:var(--font-display)] tracking-tight">WhatsApp Sessions</h1>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={Users} label="Total Sessions" value={all.length} />
         <StatCard icon={Clock} label="Active" value={active.length} />

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { ShieldCheck, Landmark, CheckCircle } from "lucide-react";
 
 interface BankResponse {
   name: string;
@@ -62,7 +61,6 @@ export default function CompleteProfile() {
 
       await api.post(`/merchants/${user?.userId}/complete-profile`, payload);
       toast.success("Profile completed successfully!");
-      // Force a reload to refresh auth state and redirect to dashboard
       window.location.href = "/dashboard";
     } catch (err) {
       toast.error(getApiErrorMessage(err));
@@ -72,103 +70,77 @@ export default function CompleteProfile() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div className="bg-card rounded-2xl shadow-xl overflow-hidden border border-border/60">
-        <div className="p-8 sm:p-12">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6">
-              <ShieldCheck className="h-8 w-8 text-primary" />
+    <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6">
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-2 font-[family-name:var(--font-display)] tracking-tight">Complete Your Profile</h1>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+            We need a few more details to secure your account and set up your payouts.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Identity Verification */}
+          <div className="bg-card rounded-xl border border-border/50 p-6 space-y-5">
+            <h2 className="text-base font-semibold text-foreground font-[family-name:var(--font-display)]">
+              Identity Verification
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="bvn" className="text-sm font-medium">Bank Verification Number (BVN) *</Label>
+                <Input id="bvn" placeholder="Enter 11-digit BVN" {...register("bvn")} className="h-10" />
+                {errors.bvn && <p className="text-xs text-destructive">{errors.bvn.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="nin" className="text-sm font-medium">National Identity Number (NIN)</Label>
+                <Input id="nin" placeholder="Enter 11-digit NIN (Optional)" {...register("nin")} className="h-10" />
+                {errors.nin && <p className="text-xs text-destructive">{errors.nin.message}</p>}
+              </div>
             </div>
-            <h1 className="text-3xl font-bold text-foreground mb-3 font-[family-name:var(--font-display)]">Complete Your Profile</h1>
-            <p className="text-muted-foreground text-lg">
-              We need a few more details to secure your account and set up your payouts.
+            <p className="text-xs text-muted-foreground">
+              Your BVN is required to verify your identity before you can create orders.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            <div className="bg-muted/40 rounded-xl p-6 border border-border/60">
-              <h2 className="text-xl font-semibold text-foreground flex items-center mb-6 font-[family-name:var(--font-display)]">
-                <ShieldCheck className="h-5 w-5 mr-2 text-primary" />
-                Identity Verification
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="bvn" className="text-foreground font-medium">Bank Verification Number (BVN) *</Label>
-                  <Input 
-                    id="bvn" 
-                    placeholder="Enter 11-digit BVN" 
-                    {...register("bvn")} 
-                    className="h-10"
-                  />
-                  {errors.bvn && <p className="text-sm text-destructive">{errors.bvn.message}</p>}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="nin" className="text-foreground font-medium">National Identity Number (NIN)</Label>
-                  <Input 
-                    id="nin" 
-                    placeholder="Enter 11-digit NIN (Optional)" 
-                    {...register("nin")} 
-                    className="h-10"
-                  />
-                  {errors.nin && <p className="text-sm text-destructive">{errors.nin.message}</p>}
-                </div>
+          {/* Payout Information */}
+          <div className="bg-card rounded-xl border border-border/50 p-6 space-y-5">
+            <h2 className="text-base font-semibold text-foreground font-[family-name:var(--font-display)]">
+              Payout Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="payoutBankAccount" className="text-sm font-medium">Account Number *</Label>
+                <Input id="payoutBankAccount" placeholder="Enter 10-digit Account Number" {...register("payoutBankAccount")} className="h-10" />
+                {errors.payoutBankAccount && <p className="text-xs text-destructive">{errors.payoutBankAccount.message}</p>}
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Your BVN is required to verify your identity before you can create orders.
-              </p>
-            </div>
-
-            <div className="bg-muted/40 rounded-xl p-6 border border-border/60">
-              <h2 className="text-xl font-semibold text-foreground flex items-center mb-6 font-[family-name:var(--font-display)]">
-                <Landmark className="h-5 w-5 mr-2 text-primary" />
-                Payout Information
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="payoutBankAccount" className="text-foreground font-medium">Account Number *</Label>
-                  <Input 
-                    id="payoutBankAccount" 
-                    placeholder="Enter 10-digit Account Number" 
-                    {...register("payoutBankAccount")} 
-                    className="h-10"
-                  />
-                  {errors.payoutBankAccount && <p className="text-sm text-destructive">{errors.payoutBankAccount.message}</p>}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="payoutBankCode" className="text-foreground font-medium">Bank *</Label>
-                  <select 
-                    id="payoutBankCode" 
-                    {...register("payoutBankCode")} 
-                    className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    disabled={loadingBanks}
-                  >
-                    <option value="">Select a bank...</option>
-                    {banks.map((bank) => (
-                      <option key={bank.code} value={bank.code}>
-                        {bank.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.payoutBankCode && <p className="text-sm text-destructive">{errors.payoutBankCode.message}</p>}
-                </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="payoutBankCode" className="text-sm font-medium">Bank *</Label>
+                <select
+                  id="payoutBankCode"
+                  {...register("payoutBankCode")}
+                  className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm shadow-xs transition-colors hover:border-ring/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={loadingBanks}
+                >
+                  <option value="">Select a bank...</option>
+                  {banks.map((bank) => (
+                    <option key={bank.code} value={bank.code}>{bank.name}</option>
+                  ))}
+                </select>
+                {errors.payoutBankCode && <p className="text-xs text-destructive">{errors.payoutBankCode.message}</p>}
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">
-                This is where we will send your funds after an escrow transaction is completed successfully.
-              </p>
             </div>
+            <p className="text-xs text-muted-foreground">
+              This is where we will send your funds after an escrow transaction is completed successfully.
+            </p>
+          </div>
 
-            <div className="flex justify-end pt-4">
-              <Button type="submit" size="lg" className="w-full sm:w-auto min-w-[200px]" disabled={loading}>
-                {loading ? "Verifying Profile..." : (
-                  <>
-                    <CheckCircle className="mr-2 h-5 w-5" />
-                    Complete Profile
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="flex justify-end pt-2">
+            <Button type="submit" size="lg" className="w-full sm:w-auto min-w-[200px]" disabled={loading}>
+              {loading ? "Verifying Profile..." : "Complete Profile"}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );

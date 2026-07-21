@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import { useAuth } from "@/providers/AuthProvider"
 import LoadingSpinner from "@/components/shared/LoadingSpinner"
 
-import AuthLayout from "@/components/layout/AuthLayout"
 import DashboardLayout from "@/components/layout/DashboardLayout"
 import BuyerLayout from "@/components/layout/BuyerLayout"
 
@@ -62,13 +61,11 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/not-found" element={<NotFound />} />
 
-      <Route element={<AuthLayout />}>
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
-        <Route path="/auth/verify-email" element={<SuspenseWrap><VerifyEmail /></SuspenseWrap>} />
-        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-        <Route path="/auth/reset-password" element={<SuspenseWrap><ResetPassword /></SuspenseWrap>} />
-      </Route>
+      <Route path="/auth/login" element={<Login />} />
+      <Route path="/auth/register" element={<Register />} />
+      <Route path="/auth/verify-email" element={<SuspenseWrap><VerifyEmail /></SuspenseWrap>} />
+      <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+      <Route path="/auth/reset-password" element={<SuspenseWrap><ResetPassword /></SuspenseWrap>} />
 
       <Route path="/dashboard" element={<MerchantGuard><DashboardLayout sidebar="merchant" /></MerchantGuard>}>
         <Route index element={<SuspenseWrap><MerchantDashboard /></SuspenseWrap>} />

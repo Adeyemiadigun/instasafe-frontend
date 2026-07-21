@@ -15,7 +15,7 @@ export default function ChatbotSessionDetail() {
 
   return (
     <div className="space-y-6">
-      <Button variant="ghost" onClick={() => navigate("/whatsapp/sessions")} className="gap-2">
+      <Button variant="ghost" onClick={() => navigate("/whatsapp/sessions")} className="gap-2 btn-press">
         <ArrowLeft className="h-4 w-4" /> Back to Sessions
       </Button>
       <SessionDetail session={session} />

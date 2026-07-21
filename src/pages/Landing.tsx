@@ -270,17 +270,14 @@ function ProductMockup() {
   const [active, setActive] = useState(0)
 
   useEffect(() => {
-    const timer = setInterval(() => setActive((p) => (p + 1) % 2), 4000)
+    const timer = setInterval(() => setActive((p) => (p + 1) % 2), 8000)
     return () => clearInterval(timer)
   }, [])
 
   return (
     <div className="relative">
-      {/* Shadow layer */}
-      <div className="absolute -inset-6 bg-primary/[0.06] rounded-3xl rotate-1 blur-sm" />
-
       {/* Phone frame */}
-      <div className="relative bg-foreground rounded-[2rem] p-3 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.3)]">
+      <div className="relative bg-foreground rounded-[2rem] p-3 shadow-xl">
         <div className="bg-background rounded-[1.5rem] overflow-hidden">
           {/* Status bar — always visible */}
           <div className="flex items-center justify-between px-5 pt-3 pb-2 relative z-10">
@@ -389,7 +386,7 @@ function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
       className={`relative text-center transition-all duration-700 ease-spring ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={{ transitionDelay: `${index * 120}ms` }}
     >
-      <div className="relative z-10 w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-primary/25">
+      <div className="relative z-10 w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto mb-5">
         <step.icon className="h-7 w-7" />
       </div>
       <h3 className="font-display font-semibold text-lg mb-2">{step.title}</h3>
@@ -408,8 +405,8 @@ function FeatureCard({ feat, index }: { feat: typeof features[0]; index: number 
         feat.large ? "md:col-span-2 md:p-8" : ""
       } ${
         isDark
-          ? "bg-foreground text-background hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.2)]"
-          : "bg-card border border-border/40 hover:shadow-[0_8px_30px_-12px_rgba(15,118,110,0.15)]"
+          ? "bg-foreground text-background"
+          : "bg-card border border-border/40"
       } ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
       style={{ transitionDelay: `${index * 80}ms` }}
     >
@@ -432,7 +429,7 @@ export default function Landing() {
       {/* ── Header — text-only logo ── */}
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-lg font-display font-bold tracking-tight">InstaSafe</span>
+          <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-14" />
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
             <a href="#how-it-works" className="hover:text-foreground transition-colors duration-300">How It Works</a>
             <a href="#features" className="hover:text-foreground transition-colors duration-300">Features</a>
@@ -464,8 +461,6 @@ export default function Landing() {
 
       {/* ── Hero — product mockup instead of stock photo ── */}
       <section ref={heroAnim.ref} className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(15,118,110,0.04),transparent_60%)]" />
-
         <div className="relative container mx-auto px-6 py-20 md:py-28">
           <div className="grid md:grid-cols-[1fr_1fr] gap-12 md:gap-16 items-center">
             {/* Left: text */}
@@ -477,28 +472,23 @@ export default function Landing() {
               </Reveal>
 
               <Reveal delay={100}>
-                <h1 className="text-4xl md:text-[3.5rem] leading-[1.1] font-display font-bold tracking-tight mb-2">
-                  Sell with Confidence.
-                </h1>
-              </Reveal>
-
-              <Reveal delay={180}>
                 <h1 className="text-4xl md:text-[3.5rem] leading-[1.1] font-display font-bold tracking-tight mb-6">
+                  Sell with Confidence.{" "}
                   <span className="font-editorial italic text-primary">Buy without Fear.</span>
                 </h1>
               </Reveal>
 
-              <Reveal delay={260}>
+              <Reveal delay={180}>
                 <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
                   InstaSafe holds your payment in escrow until delivery is confirmed.
                   Every transaction protected, every delivery verified.
                 </p>
               </Reveal>
 
-              <Reveal delay={340}>
+              <Reveal delay={260}>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link to="/auth/register">
-                    <Button size="lg" className="text-base px-7 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 font-semibold">
+                    <Button size="lg" className="text-base px-7 bg-primary hover:bg-primary/90 font-semibold">
                       Start Selling Securely <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </Link>
@@ -560,8 +550,7 @@ export default function Landing() {
       <section id="how-it-works" className="container mx-auto px-6 py-24 md:py-32">
         <Reveal>
           <div className="text-center mb-16">
-            <p className="text-primary text-sm font-semibold tracking-wide uppercase mb-3">Simple Process</p>
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">How It Works</h2>
+            <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4">How It Works</h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">Four steps to secure, verified transactions.</p>
           </div>
         </Reveal>
@@ -584,7 +573,7 @@ export default function Landing() {
           <Reveal>
             <div className="mb-16">
               <p className="text-primary text-sm font-semibold tracking-wide uppercase mb-3">Built for Nigeria</p>
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Everything You Need</h2>
+              <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4">Everything You Need</h2>
               <p className="text-muted-foreground text-lg max-w-xl">Every feature designed for trust and speed in the Nigerian e-commerce ecosystem.</p>
             </div>
           </Reveal>
@@ -601,8 +590,7 @@ export default function Landing() {
       <section className="container mx-auto px-6 py-24 md:py-32">
         <Reveal>
           <div className="mb-16">
-            <p className="text-primary text-sm font-semibold tracking-wide uppercase mb-3">What Merchants Say</p>
-            <h2 className="text-3xl md:text-4xl font-display font-bold">Trusted Across Nigeria</h2>
+            <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight">Trusted Across Nigeria</h2>
           </div>
         </Reveal>
 
@@ -652,14 +640,14 @@ export default function Landing() {
         <div className="container mx-auto px-6 py-24 md:py-32">
           <Reveal>
             <div className="max-w-3xl">
-              <h2 className="text-4xl md:text-5xl font-display font-bold leading-tight mb-4">
+              <h2 className="text-4xl md:text-5xl font-display font-bold leading-tight tracking-tight mb-4">
                 Ready to Sell <span className="font-editorial italic text-primary">Securely</span>?
               </h2>
               <p className="text-lg opacity-60 mb-10 max-w-lg leading-relaxed">
                 Join 500+ Nigerian merchants who trust InstaSafe for every transaction.
               </p>
               <Link to="/auth/register">
-                <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/30 font-semibold">
+                <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-white font-semibold">
                   Create Free Account <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
@@ -673,7 +661,7 @@ export default function Landing() {
         <div className="container mx-auto px-6 py-12">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <span className="text-base font-display font-bold tracking-tight">InstaSafe</span>
+              <img src="/logo-wordmark.svg" alt="InstaSafe" className="h-8" />
               <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Secure escrow payments for Nigerian e-commerce. Every transaction, verified.</p>
             </div>
             <div>
