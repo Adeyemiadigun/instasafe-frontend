@@ -26,7 +26,11 @@ const registerSchema = z.object({
     return age >= 18;
   }, { message: "You must be at least 18 years old to register" }),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  phone: z.string().optional(),
+  confirmPassword: z.string(),
+  phone: z.string().regex(/^\+[1-9]\d{10,14}$/, "Must include country code (e.g., +234...)"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 })
 
 type RegisterFormData = z.infer<typeof registerSchema>
@@ -170,11 +174,21 @@ export default function Register() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="phone" className="text-sm font-medium">Phone <span className="text-muted-foreground font-normal">(optional)</span></Label>
+                <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
+                  <Input id="confirmPassword" type={showPassword ? "text" : "password"} {...register("confirmPassword")} className="pl-10" placeholder="Confirm password" />
+                </div>
+                {errors.confirmPassword && <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40" />
-                  <Input id="phone" {...register("phone")} className="pl-10" placeholder="+234..." />
+                  <Input id="phone" {...register("phone")} className="pl-10" placeholder="+2348012345678" />
                 </div>
+                {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
               </div>
 
               <Button type="submit" className="w-full h-11 font-semibold mt-2" disabled={loading}>

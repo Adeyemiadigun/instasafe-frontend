@@ -20,8 +20,8 @@ const orderSchema = z.object({
   buyerFirstName: z.string().min(1, "Buyer first name is required"),
   buyerLastName: z.string().min(1, "Buyer last name is required"),
   buyerEmail: z.string().email("Invalid email address"),
-  buyerPhone: z.string().min(10, "Valid phone number required"),
-  dispatcherPhone: z.string().optional(),
+  buyerPhone: z.string().regex(/^\+[1-9]\d{10,14}$/, "Must include country code (e.g., +234...)"),
+  dispatcherPhone: z.string().regex(/^\+[1-9]\d{10,14}$/, "Must include country code (e.g., +234...)").optional().or(z.literal('')),
 })
 
 type OrderFormData = z.infer<typeof orderSchema>
@@ -98,7 +98,7 @@ export default function CreateOrder() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="buyerPhone">Phone *</Label>
-                  <Input id="buyerPhone" {...register("buyerPhone")} />
+                  <Input id="buyerPhone" placeholder="+2348012345678" {...register("buyerPhone")} />
                   {errors.buyerPhone && <p className="text-xs text-destructive">{errors.buyerPhone.message}</p>}
                 </div>
               </div>

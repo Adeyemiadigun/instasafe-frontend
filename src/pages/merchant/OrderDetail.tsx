@@ -140,7 +140,7 @@ export default function OrderDetail() {
                     <div className="space-y-1"><Label>Last Name *</Label><Input value={buyerForm.buyerLastName} onChange={(e) => setBuyerForm((p) => ({ ...p, buyerLastName: e.target.value }))} required /></div>
                   </div>
                   <div className="space-y-1"><Label>Email *</Label><Input type="email" value={buyerForm.buyerEmail} onChange={(e) => setBuyerForm((p) => ({ ...p, buyerEmail: e.target.value }))} required /></div>
-                  <div className="space-y-1"><Label>Phone *</Label><Input value={buyerForm.buyerPhone} onChange={(e) => setBuyerForm((p) => ({ ...p, buyerPhone: e.target.value }))} required /></div>
+                  <div className="space-y-1"><Label>Phone *</Label><Input placeholder="+2348012345678" value={buyerForm.buyerPhone} onChange={(e) => setBuyerForm((p) => ({ ...p, buyerPhone: e.target.value }))} required pattern="^\+[1-9]\d{10,14}$" /></div>
                   <Button type="submit" disabled={generateLink.isPending}>{generateLink.isPending ? "Generating..." : "Generate Link"}</Button>
                 </form>
               </CardContent>

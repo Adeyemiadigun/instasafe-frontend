@@ -16,7 +16,7 @@ const paymentSchema = z.object({
   buyerFirstName: z.string().min(1, "First name is required"),
   buyerLastName: z.string().min(1, "Last name is required"),
   buyerEmail: z.string().min(1, "Email is required").email("Invalid email address"),
-  buyerPhone: z.string().min(10, "Valid phone number required"),
+  buyerPhone: z.string().regex(/^\+[1-9]\d{10,14}$/, "Must include country code (e.g., +234...)"),
 })
 
 type PaymentFormData = z.infer<typeof paymentSchema>
@@ -89,7 +89,7 @@ export default function Payment() {
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="buyerPhone" className="text-sm font-medium">Phone *</Label>
-                  <Input id="buyerPhone" {...register("buyerPhone")} />
+                  <Input id="buyerPhone" placeholder="+2348012345678" {...register("buyerPhone")} />
                   {errors.buyerPhone && <p className="text-xs text-destructive">{errors.buyerPhone.message}</p>}
                 </div>
                 <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={loading}>
