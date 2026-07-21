@@ -57,7 +57,7 @@ export default function AdminDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recent.map((d, i) => (
+                {recent.map((d) => (
                   <TableRow
                     key={d.id}
                     className="cursor-pointer hover:bg-muted/50"
