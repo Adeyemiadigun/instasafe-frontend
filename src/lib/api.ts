@@ -3,7 +3,7 @@ import { getStoredToken, getStoredRefreshToken, storeAuth, clearAuth } from "./a
 import { getStoredUser } from "./auth";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:53806/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5129/api",
   headers: { "Content-Type": "application/json" },
 });
 
