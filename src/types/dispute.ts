@@ -19,6 +19,8 @@ export interface Dispute {
   resolution: string | null;
   resolvedAt: string | null;
   resolvedBy: string | null;
+  aiConfidenceScore: number | null;
+  aiAnalysisSummary: string | null;
   createdAt: string;
 }
 

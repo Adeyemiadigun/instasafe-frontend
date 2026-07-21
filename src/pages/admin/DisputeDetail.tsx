@@ -56,7 +56,7 @@ export default function DisputeDetail() {
 
       <DisputeDetailCard dispute={dispute} />
       <DisputeEvidence evidenceUrls={dispute.evidenceUrls} />
-      <AiSuggestion suggestion={null} />
+      <AiSuggestion score={dispute.aiConfidenceScore} summary={dispute.aiAnalysisSummary} />
 
       {dispute.status === "Open" || dispute.status === "UnderReview" ? (
         <Card>

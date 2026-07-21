@@ -33,7 +33,49 @@ export default function Settings() {
           </div>
         </CardContent>
       </Card>
-      <p className="text-sm text-muted-foreground">Profile editing will be available when backend update endpoints are added.</p>
+      {/* Payout Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Payout Settings</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Bank Account Number</label>
+                <div className="flex relative">
+                  <input 
+                    type="text" 
+                    placeholder="10-digit account number" 
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Bank</label>
+                <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  <option value="">Select your bank...</option>
+                  <option value="044">Access Bank</option>
+                  <option value="058">Guaranty Trust Bank</option>
+                  <option value="033">United Bank for Africa</option>
+                  <option value="011">First Bank of Nigeria</option>
+                  <option value="057">Zenith Bank</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">This account will be used for automated disbursements from completed escrow transactions.</p>
+            <div className="flex justify-end pt-2">
+              <button 
+                type="submit" 
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                onClick={() => alert('Profile editing endpoints are coming soon!')}
+              >
+                Save Payout Settings
+              </button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
