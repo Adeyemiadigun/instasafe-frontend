@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, PackageCheck, CheckCircle2, AlertTriangle } from "lucide-react";
-import api from "@/lib/axios";
+import api from "@/lib/api";
 
 // Retrieve the persistent device fingerprint
 const getDeviceFingerprint = () => {
@@ -38,7 +38,7 @@ export default function ScanDeliver() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => sendRequest(sessionId, position.coords.latitude, position.coords.longitude),
-        (error) => sendRequest(sessionId, null, null), // user denied or error
+        (_error) => sendRequest(sessionId, null, null), // user denied or error
         { timeout: 5000 }
       );
     } else {

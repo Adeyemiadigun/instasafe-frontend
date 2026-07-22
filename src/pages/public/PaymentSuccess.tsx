@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, PackageSearch } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
