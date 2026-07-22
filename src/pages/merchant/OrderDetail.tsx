@@ -64,14 +64,7 @@ export default function OrderDetail() {
     }
   }
 
-  const handleGenerateQr = async () => {
-    try {
-      const res = await generateQr.mutateAsync()
-      setQrResult(res.data)
-    } catch (err) {
-      toast.error(getApiErrorMessage(err))
-    }
-  }
+
 
   const handleDeleteOrder = async () => {
     if (!confirm("Are you sure you want to delete this order? If a dispatcher was assigned, they will be notified.")) return;
