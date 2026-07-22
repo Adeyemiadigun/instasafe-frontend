@@ -16,6 +16,10 @@ import NotFound from "@/pages/NotFound"
 const VerifyEmail = lazy(() => import("@/pages/auth/VerifyEmail"))
 const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"))
 
+const PaymentSuccess = lazy(() => import("@/pages/public/PaymentSuccess"))
+const ScanPickup = lazy(() => import("@/pages/public/ScanPickup"))
+const ScanDeliver = lazy(() => import("@/pages/public/ScanDeliver"))
+
 const MerchantDashboard = lazy(() => import("@/pages/merchant/Dashboard"))
 const Orders = lazy(() => import("@/pages/merchant/Orders"))
 const CreateOrder = lazy(() => import("@/pages/merchant/CreateOrder"))
@@ -60,6 +64,10 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/not-found" element={<NotFound />} />
+      
+      <Route path="/payment-success" element={<SuspenseWrap><PaymentSuccess /></SuspenseWrap>} />
+      <Route path="/scan/pickup" element={<SuspenseWrap><ScanPickup /></SuspenseWrap>} />
+      <Route path="/scan/deliver" element={<SuspenseWrap><ScanDeliver /></SuspenseWrap>} />
 
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/register" element={<Register />} />
