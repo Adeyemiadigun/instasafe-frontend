@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
 import { useOrder, useOrderTimeline, useGenerateEscrowLink, useDeleteOrder } from "@/hooks/useOrders"
+import QRCode from "react-qr-code"
 import { useGenerateQrCodes } from "@/hooks/useDelivery"
 import OrderStatusBadge from "@/components/orders/OrderStatusBadge"
 import LoadingSpinner from "@/components/shared/LoadingSpinner"
@@ -39,6 +40,19 @@ export default function OrderDetail() {
 
   const deleteOrder = useDeleteOrder()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (order?.status === "FundedInEscrow" && !qrResult && !generateQr.isPending) {
+      generateQr.mutate(undefined, {
+        onSuccess: (res) => {
+          setQrResult(res.data)
+        },
+        onError: (err) => {
+          console.error("Failed to auto-fetch QR codes:", err)
+        }
+      })
+    }
+  }, [order?.status, qrResult, generateQr])
 
   const handleGenerateLink = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -180,28 +194,26 @@ export default function OrderDetail() {
 
         <TabsContent value="delivery" className="space-y-4">
           <Card>
-            <CardHeader><CardTitle className="text-base flex items-center gap-2"><QrCode className="h-4 w-4" /> QR Codes</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base flex items-center gap-2"><QrCode className="h-4 w-4" /> Your Pickup QR Code</CardTitle></CardHeader>
             <CardContent>
               {order.status === "FundedInEscrow" && !qrResult && (
-                <Button onClick={handleGenerateQr} disabled={generateQr.isPending}>{generateQr.isPending ? "Generating..." : "Generate QR Codes"}</Button>
+                <div className="flex flex-col items-center justify-center p-6 text-center">
+                  <LoadingSpinner message="Retrieving your secure QR code..." />
+                </div>
               )}
               {qrResult && (
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center justify-between p-3 rounded-lg">
-                    <span className="text-muted-foreground">Merchant Token</span>
-                    <div className="flex items-center gap-2">
-                      <code className="bg-muted px-2 py-1 rounded-md text-xs break-all max-w-[200px]">{qrResult.merchantQrToken}</code>
-                      <button onClick={() => copyToClipboard(qrResult.merchantQrToken, "Merchant token")} className="p-1 hover:bg-muted rounded-md transition-colors">
-                        {copied === "Merchant token" ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
-                      </button>
+                <div className="space-y-6 text-sm">
+                  <div className="flex flex-col items-center justify-center p-4 border border-border/50 rounded-lg bg-card">
+                    <span className="text-sm text-muted-foreground mb-4 text-center">
+                      Show this QR Code to the dispatcher when they arrive to pick up the item.
+                    </span>
+                    <div className="p-4 bg-white rounded-xl shadow-sm mb-4">
+                      <QRCode value={qrResult.merchantQrToken} size={180} />
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between p-3 rounded-lg">
-                    <span className="text-muted-foreground">Buyer Token</span>
                     <div className="flex items-center gap-2">
-                      <code className="bg-muted px-2 py-1 rounded-md text-xs break-all max-w-[200px]">{qrResult.buyerQrToken}</code>
-                      <button onClick={() => copyToClipboard(qrResult.buyerQrToken, "Buyer token")} className="p-1 hover:bg-muted rounded-md transition-colors">
-                        {copied === "Buyer token" ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5 text-muted-foreground" />}
+                      <code className="bg-muted px-2 py-1 rounded-md text-xs truncate max-w-[200px]">{qrResult.merchantQrToken}</code>
+                      <button onClick={() => copyToClipboard(qrResult.merchantQrToken, "Merchant token")} className="p-1.5 hover:bg-muted rounded-md transition-colors border border-border/50">
+                        {copied === "Merchant token" ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4 text-muted-foreground" />}
                       </button>
                     </div>
                   </div>
